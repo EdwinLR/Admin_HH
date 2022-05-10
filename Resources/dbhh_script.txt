@@ -1,0 +1,127 @@
+CREATE TABLE roles
+(	
+  roleId int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
+  role varchar(30) NOT NULL
+);
+
+INSERT INTO `roles` (`roleId`, `role`) VALUES (1, 'Student'), (2, 'Teacher'), (3, 'Coordinator');
+
+CREATE TABLE users
+(
+    email varchar(60) PRIMARY KEY NOT NULL,
+    password varchar(10) NOT NULL,
+    roleId int NOT NULL,
+    
+    FOREIGN KEY (roleId) REFERENCES roles(roleId)
+);
+
+CREATE TABLE students 
+(
+    studentId int PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+     firstName varchar(30) NOT NULL,
+    fatherLastName varchar(30) NOT NULL,
+    motherLastName varchar(30),
+    email varchar(60) NOT NULL,
+    phoneNumber varchar(10) NOT NULL,
+    admissionDate DATE NOT NULL,
+    photourl varchar(750) NOT NULL
+) AUTO_INCREMENT=6000;
+
+CREATE TABLE teachers 
+(
+    teacherId int PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+    firstName varchar(30) NOT NULL,
+    fatherLastName varchar(30) NOT NULL,
+    motherLastName varchar(30),
+    email varchar(60) NOT NULL,
+    phoneNumber varchar(10) NOT NULL,
+    rfc varchar(13) NOT NULL,
+    hiringDate DATE NOT NULL,
+	photourl varchar(750) NOT NULL
+)AUTO_INCREMENT=8000;
+
+CREATE TABLE coordinators 
+(
+    coordinatorId int PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+    firstName varchar(30) NOT NULL,
+    fatherLastName varchar(30) NOT NULL,
+    motherLastName varchar(30),
+    email varchar(60) NOT NULL,
+    phoneNumber varchar(10) NOT NULL,
+    rfc varchar(13) NOT Null,
+    hiringDate DATE NOT NULL,
+    photourl varchar(750) NOT NULL
+)AUTO_INCREMENT=10000;
+
+CREATE TABLE frequencies
+(
+	frequencyId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	frequency varchar(30)
+);
+
+CREATE TABLE schedules
+(
+	scheduleId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	startingTime TIME,
+	endingTime TIME
+);
+
+CREATE TABLE programs
+(
+	programId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	program varchar(30)
+);
+
+CREATE TABLE periods
+(
+	periodId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	period varchar(30)
+);
+
+CREATE TABLE courses
+(
+	crn int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	courseName varchar(30) NOT NULL,
+	teacherId int NOT NULL,
+	startingDate DATE NOT NULL,
+	frequencyId int NOT NULL,
+	scheduleId int NOT NULL,
+	programId int NOT NULL,
+	periodId int NOT NULL,
+	
+	FOREIGN KEY (teacherId) REFERENCES teachers(teacherId),
+	FOREIGN KEY (frequencyId) REFERENCES frequencies(frequencyId),
+	FOREIGN KEY (scheduleId) REFERENCES schedules(scheduleId),
+	FOREIGN KEY (programId) REFERENCES programs(programId),
+	FOREIGN KEY (periodId) REFERENCES periods(periodId)
+)AUTO_INCREMENT=40000;
+
+CREATE TABLE students_courses
+(
+	studentId int NOT NULL PRIMARY KEY, 
+	courseId int NOT NULL, 
+	WQ_1 int DEFAULT 0, 
+	WQ_2 int DEFAULT 0, 
+	WQ_3 int DEFAULT 0, 
+	OQ_1 int DEFAULT 0, 
+	OQ_2 int DEFAULT 0, 
+	OQ_3 int DEFAULT 0, 
+	CP_1 int DEFAULT 0, 
+	CP_2 int DEFAULT 0, 
+	CP_3 int DEFAULT 0, 
+	final_Project int DEFAULT 0, 
+	final_Grade double DEFAULT 0, 
+
+	FOREIGN KEY (courseId) REFERENCES courses(crn), 
+	FOREIGN KEY (studentId) REFERENCES students(studentId) 
+);
+
+
+
+--- LINK ELIMINACION EN CASCADA PHPMYADMIN ---
+https://stackoverflow.com/questions/13105019/how-to-add-on-delete-cascade-and-on-update-restrict-using-phpmyadmin
+
+1.- En tabla students_courses ir a la seccion de Estructura.
+2.- Luego acceder a la Vista de relaciones.
+3.- En la restriccion que relaciona con tabla courses, cambiar el ON DELETE a CASCADE
+4.- Guardar cambios
