@@ -41,11 +41,7 @@ class CoordinatorController{
 
     public async details(req:Request,res:Response):Promise<any>{
         //Destructurando una parte del objeto de Javascript
-<<<<<<< Updated upstream
-        const coordinator= (await pool).request().input("id",sql.SmallInt,req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
-=======
         const coordinator= (await(await pool).request().input("id",req.params["id"]).query('SELECT coordinators.coordinatorId, coordinators.userId, coordinators.rfc, coordinators.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinators.coordinatorId=@id')).recordset;
->>>>>>> Stashed changes
 
         if(coordinator.length > 0){
             console.log(coordinator[0]);

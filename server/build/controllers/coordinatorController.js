@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.coordinatorController = void 0;
 const database_1 = __importDefault(require("../database"));
-const mssql_1 = __importDefault(require("mssql"));
 class CoordinatorController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +57,7 @@ class CoordinatorController {
     details(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
-            const coordinator = (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
+            const coordinator = (yield (yield database_1.default).request().input("id", req.params["id"]).query('SELECT coordinators.coordinatorId, coordinators.userId, coordinators.rfc, coordinators.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinators.coordinatorId=@id')).recordset;
             if (coordinator.length > 0) {
                 console.log(coordinator[0]);
                 return res.json(coordinator[0]);

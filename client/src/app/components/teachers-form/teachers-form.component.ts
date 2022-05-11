@@ -123,11 +123,7 @@ dateString : any;
         if(this.user.photoUrl == ''){
           this.user.photoUrl = '/assets/NoImage.jpg'
         }
-<<<<<<< Updated upstream
-
-=======
         
->>>>>>> Stashed changes
         this.usersService.saveUser(this.user).subscribe(res => {
           console.log(res);
         },
