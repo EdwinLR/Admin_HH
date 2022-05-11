@@ -3,6 +3,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import {Program} from 'src/app/models/Program';
 import { LoginService } from 'src/app/services/login.service';
 import { ProgramsService } from 'src/app/services/programs.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-programs-form',
@@ -22,7 +23,8 @@ export class ProgramsFormComponent implements OnInit {
   constructor(private router:Router,
     private activatedRoute:ActivatedRoute, 
     private programService:ProgramsService,
-    private loginService : LoginService) { }
+    private loginService : LoginService,
+    private verificationService : SQLVerificatorService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -81,6 +83,8 @@ export class ProgramsFormComponent implements OnInit {
   
     saveNewProgram()
     {
+      this.program.program = this.verificationService.VerifyInjection(this.program.program!)
+
       if(this.program.program != ''){
         delete this.program.programId;
         this.programService.saveProgram(this.program).subscribe(

@@ -4,6 +4,7 @@ import { CourseDetailsService } from 'src/app/services/course-details.service';
 import { StudentsService } from 'src/app/services/students.service';
 import { CourseDetail } from 'src/app/models/CourseDetail';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-course-details-form',
@@ -37,7 +38,7 @@ export class CourseDetailsFormComponent implements OnInit {
   detailId : any = null;
 
   constructor(private courseDetailService : CourseDetailsService, private studentService : StudentsService, 
-    private router : Router, private route : ActivatedRoute, private loginService : LoginService) {
+    private router : Router, private route : ActivatedRoute, private loginService : LoginService,  private verificationService : SQLVerificatorService ) {
      }
 
   ngOnInit(): void {
@@ -71,7 +72,11 @@ export class CourseDetailsFormComponent implements OnInit {
     }
   }
 
-  saveNewCourseDetail() {
+  saveNewCourseDetail() 
+  {
+
+    this.courseDetail.studentId = this.verificationService.VerifyInjection(this.courseDetail.studentId!)
+
     if(this.courseDetail.studentId != ''){
       delete this.courseDetail.final_Grade;
       this.courseDetail.courseId = this.crn;

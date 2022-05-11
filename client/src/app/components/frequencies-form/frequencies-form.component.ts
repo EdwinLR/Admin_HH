@@ -3,6 +3,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { Frequency } from 'src/app/models/Frequency';
 import { FrequenciesService } from 'src/app/services/frequencies.service';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-frequencies-form',
@@ -23,7 +24,8 @@ export class FrequenciesFormComponent implements OnInit {
   constructor(private frequenciesService:FrequenciesService, 
     private router:Router,
     private activatedRoute:ActivatedRoute,
-    private loginService : LoginService) { }
+    private loginService : LoginService,
+    private verificationService : SQLVerificatorService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -81,6 +83,8 @@ export class FrequenciesFormComponent implements OnInit {
 
   saveNewFrequency()
   {
+    this.frequency.frequency = this.verificationService.VerifyInjection(this.frequency.frequency!)
+
     if(this.frequency.frequency != ''){
         delete this.frequency.frequencyId;
 

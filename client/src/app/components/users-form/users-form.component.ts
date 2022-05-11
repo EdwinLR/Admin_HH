@@ -6,6 +6,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Student } from 'src/app/models/Student';
 import { StudentsService } from 'src/app/services/students.service';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-users-form',
@@ -15,6 +16,7 @@ import { LoginService } from 'src/app/services/login.service';
 export class UsersFormComponent implements OnInit {
 @HostBinding('class') classes = 'row';
   user: User=
+  
   {
     fatherLastName : '',
     firstName : '',

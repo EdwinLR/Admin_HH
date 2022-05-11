@@ -6,6 +6,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 import { LoginService } from 'src/app/services/login.service';
 import { formatDate } from '@angular/common';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-teacher-form',
@@ -47,7 +48,8 @@ dateString : any;
     private router:Router,
     private activatedRoute:ActivatedRoute,
     private loginService : LoginService,
-    @Inject(LOCALE_ID) private locale:string)
+    @Inject(LOCALE_ID) private locale:string,
+    private verificationService : SQLVerificatorService)
     { 
     }
 
@@ -94,6 +96,12 @@ dateString : any;
 
   saveNewTeacher()
   {
+    this.user.email = this.verificationService.VerifyInjection(this.user.email!)
+    this.user.fatherLastName = this.verificationService.VerifyInjection(this.user.fatherLastName!)
+    this.user.firstName = this.verificationService.VerifyInjection(this.user.firstName!)
+    this.user.motherLastName = this.verificationService.VerifyInjection(this.user.motherLastName!)
+    this.user.phoneNumber = this.verificationService.VerifyInjection(this.user.phoneNumber!)
+
     let flag:boolean=false;
 
     if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 

@@ -9,6 +9,7 @@ import { ProgramsService } from 'src/app/services/programs.service';
 import { PeriodsService } from 'src/app/services/periods.service';
 import { formatDate } from '@angular/common';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-courses-form',
@@ -49,7 +50,8 @@ export class CoursesFormComponent implements OnInit
     private programsService:ProgramsService,
     private periodsService:PeriodsService,
     private loginService : LoginService,
-    @Inject(LOCALE_ID) private locale:string) { }
+    @Inject(LOCALE_ID) private locale:string,
+    private verificationService : SQLVerificatorService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -89,6 +91,10 @@ export class CoursesFormComponent implements OnInit
 
   saveNewCourse()
   {
+    this.course.courseName = this.verificationService.VerifyInjection(this.course.courseName!)
+    //this.course.crn = this.verificationService.VerifyInjection(this.course.crn!)
+    //this.course.frequencyId = this.verificationService.VerifyInjection(this.course.frequencyId!)
+
     if(this.course.courseName != '' && this.course.frequencyId != '' && this.course.periodId != '' && 
     this.course.programId != '' && this.course.scheduleId != '' && this.course.teacherId != ''){
       this.coursesService.saveCourse(this.course).subscribe(

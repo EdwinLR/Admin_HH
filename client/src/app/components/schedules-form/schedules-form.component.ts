@@ -3,6 +3,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { Schedule } from 'src/app/models/Schedule';
 import { LoginService } from 'src/app/services/login.service';
 import { SchedulesService } from 'src/app/services/schedules.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-schedules-form',
@@ -23,7 +24,8 @@ export class SchedulesFormComponent implements OnInit {
   constructor(private schedulesService:SchedulesService, 
     private router:Router,
     private activatedRoute:ActivatedRoute,
-    private loginService : LoginService) { }
+    private loginService : LoginService,
+    private verificationService : SQLVerificatorService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -88,6 +90,7 @@ export class SchedulesFormComponent implements OnInit {
 
   saveNewSchedule()
   {
+    
     delete this.schedule.scheduleId;
 
     this.schedulesService.saveSchedule(this.schedule).subscribe(

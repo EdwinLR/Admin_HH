@@ -3,6 +3,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import {Period} from 'src/app/models/Period';
 import { LoginService } from 'src/app/services/login.service';
 import { PeriodsService } from 'src/app/services/periods.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-periods-form',
@@ -22,7 +23,8 @@ export class PeriodsFormComponent implements OnInit {
   constructor(private router:Router,
     private activatedRoute:ActivatedRoute, 
     private periodService:PeriodsService,
-    private loginService : LoginService) { }
+    private loginService : LoginService,
+    private verificationService : SQLVerificatorService) { }
 
     ngOnInit(): void {
       var role = this.loginService.getCookie()
@@ -79,6 +81,8 @@ export class PeriodsFormComponent implements OnInit {
 
     saveNewPeriod()
     {
+      this.period.period = this.verificationService.VerifyInjection(this.period.period!)
+      
       if(this.period.period != ''){
         delete this.period.periodId;
     
