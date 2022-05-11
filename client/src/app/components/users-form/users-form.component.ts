@@ -16,6 +16,11 @@ export class UsersFormComponent implements OnInit {
 @HostBinding('class') classes = 'row';
   user: User=
   {
+    fatherLastName : '',
+    firstName : '',
+    motherLastName:'',
+    phoneNumber: '',
+    photoUrl:'',
     email:'',
     roleId:0,
     password:''
@@ -24,12 +29,6 @@ export class UsersFormComponent implements OnInit {
   {
     admissionDate: new Date(),
     studentId:0,
-    email: '',
-    fatherLastName : '',
-    firstName : '',
-    motherLastName:'',
-    phoneNumber: '',
-    photourl:''
   }
   edit:boolean = false;
 

@@ -17,13 +17,13 @@ const database_1 = __importDefault(require("../database"));
 class RoleController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const roles = yield database_1.default.query('SELECT * FROM roles');
+            const roles = (yield (yield database_1.default).query('SELECT * FROM roles')).recordset;
             res.json(roles);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO roles SET ?', [req.body]);
+            (yield database_1.default).request().input("role", req.body["role"]).query('INSERT INTO roles (roleName) VALUES (@role)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Rol Registrado" });
         });
@@ -32,7 +32,7 @@ class RoleController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM roles WHERE roleId=?', [id]);
+            (yield database_1.default).request().input("id", req.params["id"]).query('DELETE FROM roles WHERE roleId=@id');
             res.json({ 'message': 'Eliminando Rol ' + id });
         });
     }
@@ -40,7 +40,10 @@ class RoleController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE roles SET ? WHERE roleId=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("role", req.body["role"])
+                .input("id", req.params["id"])
+                .query('UPDATE roles SET roleName=@role WHERE roleId=@id');
             console.log(req.body);
             res.json({ 'message': 'Rol ' + id + ' Modificado' });
         });
@@ -49,10 +52,10 @@ class RoleController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const program = yield database_1.default.query('SELECT * FROM roles WHERE roleId=?', [id]);
-            if (program.length > 0) {
-                console.log(program[0]);
-                return res.json(program[0]);
+            const role = (yield (yield database_1.default).request().input("id", req.params["id"]).query('SELECT * FROM roles WHERE roleId=@id')).recordset;
+            if (role.length > 0) {
+                console.log(role[0]);
+                return res.json(role[0]);
             }
             else {
                 res.status(404).json({ 'message': 'Rol no encontrado' });

@@ -17,13 +17,17 @@ const database_1 = __importDefault(require("../database"));
 class ScheduleController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const schedules = yield database_1.default.query('SELECT * FROM schedules');
+            const schedules = (yield (yield database_1.default).query('SELECT * FROM schedules')).recordset;
             res.json(schedules);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO schedules SET ?', [req.body]);
+            (yield database_1.default)
+                .request()
+                .input("startingTime", req.body["startingTime"])
+                .input("endingTime", req.body["endingTime"])
+                .query('INSERT INTO schedules (startingTime, endingTime) VALUES (@startingTime,@endingTime)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Horario Registrado" });
         });
@@ -32,7 +36,9 @@ class ScheduleController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM schedules WHERE scheduleId=?', [id]);
+            (yield database_1.default).request()
+                .input("id", id)
+                .query('DELETE FROM schedules WHERE scheduleId=@id');
             res.json({ 'message': 'Eliminando Horario ' + id });
         });
     }
@@ -40,7 +46,12 @@ class ScheduleController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE schedules SET ? WHERE scheduleId=?', [req.body, id]);
+            (yield database_1.default)
+                .request()
+                .input("id", id)
+                .input("startingTime", req.body["startingTime"])
+                .input("endingTime", req.body["endingTime"])
+                .query('UPDATE schedules SET startingTime=@startingTime, endingTime=@endingTime WHERE scheduleId=@id');
             console.log(req.body);
             res.json({ 'message': 'Horario ' + id + ' Modificado' });
         });
@@ -49,7 +60,9 @@ class ScheduleController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const schedule = yield database_1.default.query('SELECT * FROM schedules WHERE scheduleId=?', [id]);
+            const schedule = (yield (yield database_1.default).request()
+                .input("id", id)
+                .query('SELECT * FROM schedules WHERE scheduleId=@id')).recordset;
             if (schedule.length > 0) {
                 console.log(schedule[0]);
                 return res.json(schedule[0]);

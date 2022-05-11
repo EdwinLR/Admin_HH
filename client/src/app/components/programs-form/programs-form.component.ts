@@ -26,7 +26,7 @@ export class ProgramsFormComponent implements OnInit {
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       const params=this.activatedRoute.snapshot.params;
       //console.log(params);
       if(params['programId'])

@@ -26,7 +26,7 @@ export class CoordinatorsListComponent implements OnInit {
   ngOnInit(): void
   {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       this.listCoordinators();
       this.filluser;
     }

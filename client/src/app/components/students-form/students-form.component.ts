@@ -16,7 +16,12 @@ export class StudentsFormComponent implements OnInit {
 @HostBinding ('class') classes = 'row';
 user:User=
 {
-  email:'',
+    firstName:'',
+    fatherLastName:'',
+    motherLastName:'',
+    email:'',
+    phoneNumber:'',
+    photoUrl:'',
   roleId:1,
   password:'12345'
 
@@ -24,12 +29,6 @@ user:User=
 student : Student=
 {
   studentId:0,
-  firstName:'',
-  fatherLastName:'',
-  motherLastName:'',
-  email:'',
-  phoneNumber:'',
-  photourl:'',
   admissionDate: new Date(),
 
 };
@@ -39,6 +38,8 @@ users : any = [];
 register : any = [];
 email : any = null;
 exists : boolean = false;
+createdUser:any=[];
+
 dateString : any;
 
   constructor(private studentsService : StudentsService,private usersService:UsersService, 
@@ -51,7 +52,7 @@ dateString : any;
   ngOnInit(): void 
   {
     var role = this.loginService.getCookie()
-    if(role == '3' || role == '2'){
+    if(role == '1' || role == '2'){
       const params = this.activatedRoute.snapshot.params;
       console.log(params)
       if(params['studentId']) 
@@ -82,12 +83,12 @@ dateString : any;
 
    saveNewStudent()
   {
-    if(this.student.email != '' && this.student.fatherLastName != '' && this.student.firstName != '' && 
-      this.student.motherLastName != '' && this.student.phoneNumber != ''){
+    if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 
+      this.user.motherLastName != '' && this.user.phoneNumber != ''){
       console.log(this.student);
     
       for (let i = 0; i < this.register.length; i++) {
-        if (this.register[i].email == this.student.email) {
+        if (this.register[i].email == this.user.email) {
           this.exists = true;
           break;
         }
@@ -99,26 +100,28 @@ dateString : any;
       if(!this.exists){
         delete this.student.studentId;
 
-        if(this.student.photourl == ''){
-          this.student.photourl = '/assets/NoImage.jpg'
+        if(this.user.photoUrl == ''){
+          this.user.photoUrl = '/assets/NoImage.jpg'
         }
 
-        this.studentsService.saveStudent(this.student).subscribe(
-          res => {
+        if(this.user.photoUrl == ''){
+            this.user.photoUrl = '/assets/NoImage.jpg'
+          }
+          this.usersService.saveUser(this.user).subscribe(res => {
             console.log(res);
-            this.router.navigate(['/students']);
           },
-          err => console.error(err)
-        );
-
-          this.user.email=this.student.email;
-          this.usersService.saveUser(this.user).subscribe(res=>{
-          console.log(this.student)
-          console.log(res);
-          this.router.navigate(['/students'])
-        },
-        err => console.error(err)
-        );
+          err => console.error(err))
+  
+          this.createdUser=this.usersService.getUser(this.user.email!).subscribe()
+          this.student.userId=this.createdUser[0]["userId"];
+          
+          this.studentsService.saveStudent(this.student).subscribe(
+            res => {
+              console.log(res);
+              this.router.navigate(['/students']);
+            },
+            err => console.error(err)
+          );
       }
       else{
         alert("No puedes registrar un nuevo usuario con ese correo.")
@@ -131,7 +134,7 @@ dateString : any;
 
   updateStudent()
   {
-   // console.log(this.student);
+   console.log(this.student);
     this.studentsService.updateStudent(this.student.studentId!,this.student).subscribe
     (
     res => 

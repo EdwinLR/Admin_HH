@@ -1,12 +1,7 @@
 export interface Coordinator
 {
     coordinatorId?:number,
-    firstName?: string;
-    fatherLastName?: string;
-    motherLastName?: string;
-    email? : string;
-    phoneNumber?: string;
-    photourl?:string;
+    userId?:number,
     rfc?:string;
     hiringDate?:Date;
 }

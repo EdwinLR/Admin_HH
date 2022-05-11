@@ -16,20 +16,19 @@ export class CoordinatorsFormComponent implements OnInit {
 @HostBinding ('class') classes = 'row';
 user:User=
 {
+  firstName: '',
+  fatherLastName:'',
+  motherLastName:'',
   email:'',
-  roleId:3,
+  phoneNumber:'',
+  photoUrl:'',
+  roleId:1,
   password:'12345'
 }
 coordinator : Coordinator=
 {
   coordinatorId:0,
-  firstName: '',
-  fatherLastName:'',
-  motherLastName:'',
-  email:'',
   hiringDate: new Date(),
-  phoneNumber:'',
-  photourl:'',
   rfc:'',
 };
 edit:boolean=false;
@@ -37,6 +36,7 @@ edit:boolean=false;
 users : any = [];
 register : any = [];
 exists : boolean = false;
+createdUser:any=[];
 dateString : any;
 
   constructor(private coordinatorsService:CoordinatorsService, 
@@ -50,7 +50,7 @@ dateString : any;
   ngOnInit(): void 
   {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       const params=this.activatedRoute.snapshot.params;
       console.log(params['coordinatorId'])
       if(params['coordinatorId'])
@@ -79,12 +79,12 @@ dateString : any;
 
   saveNewCoordinator()
   {
-    if(this.coordinator.email != '' && this.coordinator.fatherLastName != '' && this.coordinator.firstName != '' && 
-    this.coordinator.motherLastName != '' && this.coordinator.phoneNumber != '' && this.coordinator.rfc != ''){
+    if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 
+    this.user.motherLastName != '' && this.user.phoneNumber != '' && this.coordinator.rfc != ''){
       console.log(this.coordinator);
     
       for (let i = 0; i < this.register.length; i++) {
-        if (this.register[i].email == this.coordinator.email) {
+        if (this.register[i].email == this.user.email) {
           this.exists = true;
           break;
         }
@@ -96,26 +96,24 @@ dateString : any;
       if(!this.exists){
         delete this.coordinator.coordinatorId;
 
-        if(this.coordinator.photourl == ''){
-          this.coordinator.photourl = '/assets/NoImage.jpg'
+        if(this.user.photoUrl == ''){
+          this.user.photoUrl = '/assets/NoImage.jpg'
         }
-  
+        this.usersService.saveUser(this.user).subscribe(res => {
+          console.log(res);
+        },
+        err => console.error(err))
+
+        this.createdUser=this.usersService.getUser(this.user.email!).subscribe()
+        this.coordinator.userId=this.createdUser[0]["userId"];
+        
         this.coordinatorsService.saveCoordinator(this.coordinator).subscribe(
           res => {
             console.log(res);
-            this.router.navigate(['/coordinators']);
           },
           err => console.error(err)
         );
-  
-          this.user.email=this.coordinator.email;
-          this.usersService.saveUser(this.user).subscribe(res=>{
-          console.log(this.coordinator)
-          console.log(res);
-          this.router.navigate(['/coordinators'])
-        },
-        err => console.error(err)
-        );
+        
       }
       else{
         alert("No puedes registrar un nuevo usuario con ese correo.")

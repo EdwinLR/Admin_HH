@@ -13,11 +13,16 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./teachers-form.component.css']
 })
 export class TeachersFormComponent implements OnInit {
-  //Necesario para mostrar los divs de forma organizada
+//Necesario para mostrar los divs de forma organizada
   @HostBinding('class') classes='row';
   user:User=
 {
   email:'',
+  firstName:'',
+  fatherLastName:'',
+  motherLastName:'',
+  phoneNumber:'',
+  photoUrl:'',
   roleId:2,
   password:'12345'
 };
@@ -25,13 +30,8 @@ export class TeachersFormComponent implements OnInit {
 teacher:Teacher=
 {
   teacherId:0,
-  firstName:'',
-  fatherLastName:'',
-  motherLastName:'',
-  email:'',
-  phoneNumber:'',
-  photourl:'',
   rfc:'',
+  email:'',
   hiringDate:new Date
 }
 
@@ -53,7 +53,7 @@ dateString : any;
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       const params=this.activatedRoute.snapshot.params;
       if(params['teacherId'])
       {
@@ -63,10 +63,22 @@ dateString : any;
           {
             console.log(res)
             this.teacher=res;
-            this.edit = true;
 
             this.dateString = formatDate(this.teacher.hiringDate!, 'yyyy-MM-dd', this.locale)
             console.log(this.dateString)
+          },
+          err => console.error(err)
+        );
+      }
+      if(params['userId'])
+      {
+        this.usersService.getUser(params['userId']).subscribe
+        (
+          res => 
+          {
+            console.log(res)
+            this.user=res;
+            this.edit = true;
           },
           err => console.error(err)
         );
@@ -82,11 +94,13 @@ dateString : any;
 
   saveNewTeacher()
   {
-    if(this.teacher.email != '' && this.teacher.fatherLastName != '' && this.teacher.firstName != '' && 
-    this.teacher.motherLastName != '' && this.teacher.phoneNumber != '' && this.teacher.rfc != ''){
+    let flag:boolean=false;
+
+    if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 
+    this.user.motherLastName != '' && this.user.phoneNumber != '' && this.teacher.rfc != ''){
       console.log(this.teacher);
       for (let i = 0; i < this.register.length; i++) {
-        if (this.register[i].email == this.teacher.email) {
+        if (this.register[i].email == this.user.email) {
           this.exists = true;
           break;
         }
@@ -98,25 +112,26 @@ dateString : any;
       if(!this.exists){
         delete this.teacher.teacherId;
 
-        if(this.teacher.photourl == ''){
-          this.teacher.photourl = '/assets/NoImage.jpg'
+        if(this.user.photoUrl == ''){
+          this.user.photoUrl = '/assets/NoImage.jpg'
         }
 
+        if(this.user.photoUrl == ''){
+          this.user.photoUrl = '/assets/NoImage.jpg'
+        }
+        this.usersService.saveUser(this.user).subscribe(res => {
+          console.log(res);
+        },
+        err => console.error(err))
+        
+        this.teacher.email=this.user.email;
+        
         this.teachersService.saveTeacher(this.teacher).subscribe(
           res => {
             console.log(res);
-            this.router.navigate(['/teachers']);
+            this.router.navigate(["/teachers"]);
           },
           err => console.error(err)
-        );
-
-          this.user.email=this.teacher.email;
-          this.usersService.saveUser(this.user).subscribe(res=>{
-          console.log(this.teacher)
-          console.log(res);
-          this.router.navigate(['/teachers'])
-        },
-        err => console.error(err)
         );
       }
       else{
@@ -130,9 +145,15 @@ dateString : any;
   
 
   updateTeacher(){
-    //console.log(this.teacher);
-    //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
-  
+    console.log(this.teacher);
+    
+    this.usersService.updateUser(this.teacher.userId!,this.user).subscribe(
+      res =>{
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+
     this.teachersService.updateTeacher(this.teacher.teacherId!,this.teacher).subscribe(
       res =>{
         console.log(res);

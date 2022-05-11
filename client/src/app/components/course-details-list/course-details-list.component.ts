@@ -17,7 +17,7 @@ export class CourseDetailsListComponent implements OnInit {
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
-    if(role == '3' || role == '2'){
+    if(role == '1' || role == '2'){
       this.id = this.route.snapshot.paramMap.get('id')
       this.getListCourseDetails(this.id);
     }

@@ -26,9 +26,8 @@ export class TeachersListComponent implements OnInit {
   ngOnInit(): void 
   {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       this.listTeachers()
-      this.filluser();
     }
     else{
       alert("No tienes permisos para acceder a este apartado.")
@@ -37,32 +36,17 @@ export class TeachersListComponent implements OnInit {
     
   }
 
-  deleteTeacher(teacherId:string)
+  deleteTeacher(userId:string)
   {
-    this.teacherService.getTeacher(teacherId).subscribe(
-      res => {
-        this.teacher = res
-      }, err => console.error(err)
-    );
-
-    this.userService.deleteUser(this.teacher.email).subscribe(
+    this.userService.deleteUser(userId).subscribe(
       res =>
       {
         console.log(res);
-        this.filluser();
+        this.router.navigate(['/teachers'])
+        
       },
       err => console.error(err)
     )
-
-    this.teacherService.deleteTeacher(teacherId).subscribe
-    (
-      res =>
-      {
-        console.log(res);
-        this.listTeachers();
-      },
-      err => console.error(err)
-    );
   }
 
   
@@ -71,18 +55,6 @@ export class TeachersListComponent implements OnInit {
       res => this.teachers=res,
       err => console.error(err)
     );
-  }
-
-  filluser()
-  {
-    this.userService.getUsers().
-    subscribe(
-      res => {
-        this.users = res;
-        console.log(res)
-      },
-      err => console.error(err)
-    )
   }
   
 }

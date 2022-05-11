@@ -14,16 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.frequencyController = void 0;
 const database_1 = __importDefault(require("../database"));
+const mssql_1 = __importDefault(require("mssql"));
 class FrequencyController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const frequencies = yield database_1.default.query('SELECT * FROM frequencies');
+            const frequencies = (yield (yield database_1.default).query('SELECT * FROM frequencies')).recordset;
             res.json(frequencies);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO frequencies SET ?', [req.body]);
+            yield (yield database_1.default).request().input("frequency", req.body["frequency"]).query('INSERT INTO frequencies VALUES (@frequency)');
             console.log(req.body);
             res.json({ 'message': "Nueva Frecuencia Registrada" });
         });
@@ -32,7 +33,7 @@ class FrequencyController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM frequencies WHERE frequencyId=?', [id]);
+            yield (yield database_1.default).request().input("id", req.params["id"]).query('DELETE FROM frequencies WHERE frequencyId=@id');
             res.json({ 'message': 'Eliminando frequencia ' + id });
         });
     }
@@ -40,22 +41,20 @@ class FrequencyController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE frequencies SET ? WHERE frequencyId=?', [req.body, id]);
+            yield (yield database_1.default).request().input("cuerpo", req.body["frequency"]).input("id", id).query('UPDATE frequencies SET frequency=@cuerpo WHERE frequencyId=@id');
             console.log(req.body);
             res.json({ 'message': 'Frecuencia ' + id + ' Modificada' });
         });
     }
     details(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            //Destructurando una parte del objeto de Javascript
-            const { id } = req.params;
-            const frequency = yield database_1.default.query('SELECT * FROM frequencies WHERE frequencyId=?', [id]);
+            const frequency = (yield (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT * FROM frequencies WHERE frequencyId=@id')).recordset;
             if (frequency.length > 0) {
                 console.log(frequency[0]);
                 return res.json(frequency[0]);
             }
             else {
-                res.status(404).json({ 'message': 'Frequencia no encontrada' });
+                res.status(404).json({ 'message': 'Estudiante no encontrado' });
             }
         });
     }

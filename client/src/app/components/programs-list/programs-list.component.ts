@@ -17,7 +17,7 @@ export class ProgramsListComponent implements OnInit {
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
-    if(role == '3'){
+    if(role == '1'){
       this.listPrograms();
     }
     else{

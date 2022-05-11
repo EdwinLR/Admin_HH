@@ -14,16 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.coordinatorController = void 0;
 const database_1 = __importDefault(require("../database"));
+const mssql_1 = __importDefault(require("mssql"));
 class CoordinatorController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const coordinators = yield database_1.default.query('SELECT * FROM coordinators');
+            const coordinators = (yield (yield database_1.default).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId')).recordset;
             res.json(coordinators);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO coordinators SET ?', [req.body]);
+            (yield database_1.default).request()
+                .input("userId", req.body["userId"])
+                .input("rfc", req.body["rfc"])
+                .input("hiringDate", req.body["hiringDate"])
+                .query('INSERT INTO coordinators (userId,rfc,hiringDate) VALUES (@userId, @rfc, @hiringDate)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Coordinador Registrado" });
         });
@@ -32,7 +37,7 @@ class CoordinatorController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM coordinators WHERE coordinatorId=?', [id]);
+            (yield database_1.default).request().input('id', req.params).query('DELETE FROM coordinators WHERE coordinatorId=@id');
             res.json({ 'message': 'Eliminando a Coordinador con matrícula ' + id });
         });
     }
@@ -40,7 +45,12 @@ class CoordinatorController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE coordinators SET ? WHERE coordinatorId=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("userId", req.body["userId"])
+                .input("rfc", req.body["rfc"])
+                .input("hiringDate", req.body["hiringDate"])
+                .input("id", req.params)
+                .query('UPDATE coordinators SET userId=@userId, rfc=@rfc, hiringDate=@hiringDate WHERE coordinatorId=@id');
             console.log(req.body);
             res.json({ 'message': 'Coordinador con matrícula ' + id + ' Modificado' });
         });
@@ -48,11 +58,10 @@ class CoordinatorController {
     details(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
-            const { id } = req.params;
-            const coordinator = yield database_1.default.query('SELECT * FROM coordinators C WHERE coordinatorId=?', [id]);
-            if (coordinator.length > 0) {
-                console.log(coordinator[0]);
-                return res.json(coordinator[0]);
+            const coordinator = (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users FROM coordinators.userId=users.userId AND coordinatorId=@id');
+            if ((yield coordinator).recordsets.length > 0) {
+                console.log((yield coordinator).recordsets[0]);
+                return res.json((yield coordinator).recordsets[0]);
             }
             else {
                 res.status(404).json({ 'message': 'Coordinador no encontrado' });

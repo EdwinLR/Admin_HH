@@ -17,13 +17,23 @@ const database_1 = __importDefault(require("../database"));
 class UserController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield database_1.default.query('SELECT * FROM users');
+            const users = (yield (yield database_1.default).request().query('SELECT * FROM users')).recordset;
+            console.log(users);
             res.json(users);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO users SET ?', [req.body]);
+            (yield database_1.default).request()
+                .input("roleId", req.body["roleId"])
+                .input("firstName", req.body["firstName"])
+                .input("fatherLastName", req.body["fatherLastName"])
+                .input("motherLastName", req.body["motherLastName"])
+                .input("email", req.body["email"])
+                .input("phoneNumber", req.body["phoneNumber"])
+                .input("password", req.body["password"])
+                .input("photo", req.body["photoUrl"])
+                .query('INSERT INTO users (firstName, fatherLastName, motherLastName, email, phoneNumber, password, roleId, photoUrl) VALUES (@firstName, @fatherLastName, @motherLastName, @email,@phoneNumber,@password, @roleId, @photo)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Usuario Registrado" });
         });
@@ -32,7 +42,7 @@ class UserController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM users WHERE email=?', [id]);
+            yield (yield database_1.default).request().input("id", id).query('DELETE FROM users WHERE userId=@id');
             res.json({ 'message': 'Eliminando usuario ' + id });
         });
     }
@@ -40,7 +50,17 @@ class UserController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE users SET ? WHERE email=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("id", id)
+                .input("roleId", req.body["roleId"])
+                .input("firstName", req.body["firstName"])
+                .input("fatherLastName", req.body["fatherLastName"])
+                .input("motherLastName", req.body["motherLastName"])
+                .input("email", req.body["email"])
+                .input("phoneNumber", req.body["phoneNumber"])
+                .input("password", req.body["password"])
+                .input("photo", req.body["photoUrl"])
+                .query('UPDATE users SET roleId=@roleId, firstName=@firstName, fatherLastName=@fatherLastName, motherLastName=@motherLastName, email=@email, phoneNumber=@phoneNumber, password=@password, photoUrl=@photo WHERE userId=@id');
             console.log(req.body);
             res.json({ 'message': 'Usuario ' + id + ' Modificado' });
         });
@@ -48,11 +68,10 @@ class UserController {
     details(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
-            const { id } = req.params;
-            const program = yield database_1.default.query('SELECT * FROM users WHERE email=?', [id]);
-            if (program.length > 0) {
-                console.log(program[0]);
-                return res.json(program[0]);
+            const user = (yield (yield database_1.default).request().input("id", req.params["id"]).query('SELECT * FROM users WHERE userId=@id')).recordset;
+            if (user.length > 0) {
+                console.log(user[0]);
+                return res.json(user[0]);
             }
             else {
                 res.status(404).json({ 'message': 'Usuario no encontrado' });

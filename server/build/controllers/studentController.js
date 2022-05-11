@@ -17,13 +17,16 @@ const database_1 = __importDefault(require("../database"));
 class StudentController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const students = yield database_1.default.query('SELECT * FROM students');
+            const students = (yield (yield database_1.default).query('SELECT students.*, users.* FROM students, users WHERE students.userId=users.userId')).recordset;
             res.json(students);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO students SET ?', [req.body]);
+            (yield database_1.default).request()
+                .input("userId", req.body["userId"])
+                .input("admissionDate", req.body["admissionDate"])
+                .query('INSERT INTO students (userId, admissionDate) VALUES (@userId, @admissionDate)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Estudiante Registrado" });
         });
@@ -32,7 +35,9 @@ class StudentController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM students WHERE studentId=?', [id]);
+            (yield database_1.default).request()
+                .input("id", req.body["id"])
+                .query('DELETE FROM students WHERE studentId=@id');
             res.json({ 'message': 'Eliminando Estudiante con matrícula ' + id });
         });
     }
@@ -40,7 +45,11 @@ class StudentController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE students SET ? WHERE studentId=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("userId", req.body["userId"])
+                .input("admissionDate", req.body["admissionDate"])
+                .input("id", id)
+                .query('UPDATE students SET userId=@userId, admissionDate=@admissionDate WHERE studentId=@id');
             console.log(req.body);
             res.json({ 'message': 'Estudiante con matrícula ' + id + ' Modificado' });
         });
@@ -49,10 +58,12 @@ class StudentController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const program = yield database_1.default.query('SELECT * FROM students S WHERE studentId=?', [id]);
-            if (program.length > 0) {
-                console.log(program[0]);
-                return res.json(program[0]);
+            const student = (yield (yield database_1.default).request()
+                .input("id", req.body["id"])
+                .query('SELECT SELECT students.studentId, students.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId AND studentId=@id')).recordset;
+            if (student.length > 0) {
+                console.log(student[0]);
+                return res.json(student[0]);
             }
             else {
                 res.status(404).json({ 'message': 'Estudiante no encontrado' });

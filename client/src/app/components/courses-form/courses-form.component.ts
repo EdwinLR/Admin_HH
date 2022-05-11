@@ -53,7 +53,7 @@ export class CoursesFormComponent implements OnInit
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
-    if(role == '3' || role == '2'){
+    if(role == '1' || role == '2'){
       this.schedules=this.schedulesService.getSchedules().subscribe(s=>{this.schedules=s});
       this.frequencies=this.frequenciesService.getFrequencies().subscribe(f=>{this.frequencies=f});
       this.teachers=this.teachersService.getTeachers().subscribe(t=>{this.teachers=t})

@@ -16,7 +16,6 @@ class ScheduleRoutes{
         this.router.delete('/:id',scheduleController.delete);
         this.router.put('/:id',scheduleController.update);
         this.router.get('/:id',scheduleController.details);
-        // this.router.get('/:startingDate/:endingDate',scheduleController.validateRow);
     }
 }
 

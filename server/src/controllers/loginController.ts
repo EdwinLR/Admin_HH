@@ -5,8 +5,7 @@ class LoginController
 {
     public async getUserDetail (req:Request, res : Response): Promise<any>
     {
-        const {email} = req.params;
-        const user = await pool.query('SELECT * FROM users WHERE email = ?',[email])
+        const user = (await (await pool).request().input("email",req.params["email"]).query('SELECT * FROM users WHERE email = @email')).recordset
         res.json(user);
     }
 }

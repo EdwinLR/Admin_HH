@@ -17,13 +17,17 @@ const database_1 = __importDefault(require("../database"));
 class TeacherController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const teachers = yield database_1.default.query('SELECT * FROM teachers');
+            const teachers = (yield (yield database_1.default).query('SELECT teachers.teacherId, teachers.userId, teachers.rfc, teachers.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM teachers, users WHERE teachers.userId=users.userId')).recordset;
             res.json(teachers);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO teachers SET ?', [req.body]);
+            (yield database_1.default).request()
+                .input("email", req.body["email"])
+                .input("rfc", req.body["rfc"])
+                .input("hiringDate", req.body["hiringDate"])
+                .execute('CrearTeacher');
             console.log(req.body);
             res.json({ 'message': "Nuevo Teacher Registrado" });
         });
@@ -32,7 +36,9 @@ class TeacherController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM teachers WHERE teacherId=?', [id]);
+            (yield database_1.default).request()
+                .input("id", req.body["id"])
+                .query('DELETE FROM teachers WHERE teacherId=@id');
             res.json({ 'message': 'Eliminando a Teacher con matrícula ' + id });
         });
     }
@@ -40,7 +46,11 @@ class TeacherController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE teachers SET ? WHERE teacherId=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("rfc", req.body["rfc"])
+                .input("hiringDate", req.body["hiringDate"])
+                .input("id", req.params["id"])
+                .query('UPDATE teachers SET rfc=@rfc, hiringDate=@hiringDate WHERE teacherId=@id');
             console.log(req.body);
             res.json({ 'message': 'Teacher con matrícula ' + id + ' Modificado' });
         });
@@ -49,7 +59,10 @@ class TeacherController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const teacher = yield database_1.default.query('SELECT * FROM teachers T WHERE teacherId=?', [id]);
+            const teacher = (yield (yield database_1.default)
+                .request()
+                .input("id", req.params["id"])
+                .query('SELECT teachers.teacherId, teachers.userId, teachers.rfc, teachers.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM teachers, users WHERE teachers.userId=users.userId AND teacherId=@id')).recordset;
             if (teacher.length > 0) {
                 console.log(teacher[0]);
                 return res.json(teacher[0]);

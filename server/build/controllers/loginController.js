@@ -17,8 +17,7 @@ const database_1 = __importDefault(require("../database"));
 class LoginController {
     getUserDetail(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email } = req.params;
-            const user = yield database_1.default.query('SELECT * FROM users WHERE email = ?', [email]);
+            const user = (yield (yield database_1.default).request().input("email", req.params["email"]).query('SELECT * FROM users WHERE email = @email')).recordset;
             res.json(user);
         });
     }

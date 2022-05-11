@@ -4,12 +4,16 @@ import pool from '../database';
 class ScheduleController{
 
     public async index(req:Request, res:Response ){
-        const schedules = await pool.query('SELECT * FROM schedules');
+        const schedules = (await (await pool).query('SELECT * FROM schedules')).recordset;
         res.json(schedules);
     }
 
     public async create(req:Request, res:Response):Promise<void>{
-        await pool.query('INSERT INTO schedules SET ?', [req.body]);
+        (await pool)
+        .request()
+        .input("startingTime",req.body["startingTime"])
+        .input("endingTime",req.body["endingTime"])
+        .query('INSERT INTO schedules (startingTime, endingTime) VALUES (@startingTime,@endingTime)');
         console.log(req.body);
         res.json({'message':"Nuevo Horario Registrado"});
     }
@@ -17,14 +21,21 @@ class ScheduleController{
     //Método para eliminar un registro
     public async delete(req:Request,res:Response):Promise<void>{
         const {id}=req.params;
-        await pool.query('DELETE FROM schedules WHERE scheduleId=?',[id]);
+        (await pool).request()
+        .input("id",id)
+        .query('DELETE FROM schedules WHERE scheduleId=@id');
         res.json({'message':'Eliminando Horario '+id});
     }
 
     //Método para actualizar un registro
     public async update(req:Request,res:Response):Promise<void>{
         const {id}=req.params;
-        await pool.query('UPDATE schedules SET ? WHERE scheduleId=?', [req.body,id]);
+        (await pool)
+        .request()
+        .input("id",id)
+        .input("startingTime",req.body["startingTime"])
+        .input("endingTime",req.body["endingTime"])
+        .query('UPDATE schedules SET startingTime=@startingTime, endingTime=@endingTime WHERE scheduleId=@id');
         console.log(req.body);
         res.json({'message':'Horario '+id+ ' Modificado'});
     }
@@ -32,7 +43,9 @@ class ScheduleController{
     public async details(req:Request,res:Response):Promise<any>{
         //Destructurando una parte del objeto de Javascript
         const {id}=req.params;
-        const schedule= await pool.query('SELECT * FROM schedules WHERE scheduleId=?', [id]);
+        const schedule= (await(await pool).request()
+        .input("id",id)
+        .query('SELECT * FROM schedules WHERE scheduleId=@id')).recordset;
 
         if(schedule.length > 0){
             console.log(schedule[0]);

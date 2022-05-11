@@ -17,13 +17,13 @@ const database_1 = __importDefault(require("../database"));
 class ProgramController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const programs = yield database_1.default.query('SELECT * FROM programs');
+            const programs = (yield (yield database_1.default).query('SELECT * FROM programs')).recordset;
             res.json(programs);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO programs SET ?', [req.body]);
+            (yield database_1.default).request().input("program", req.body["program"]).query('INSERT INTO programs (program) VALUES (@program)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Programa Registrado" });
         });
@@ -32,7 +32,7 @@ class ProgramController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM programs WHERE programId=?', [id]);
+            (yield database_1.default).request().input("id", req.params["id"]).query('DELETE FROM programs WHERE programId=@id');
             res.json({ 'message': 'Eliminando Programa ' + id });
         });
     }
@@ -40,7 +40,10 @@ class ProgramController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE programs SET ? WHERE programId=?', [req.body, id]);
+            (yield database_1.default).request()
+                .input("program", req.body["program"])
+                .input("id", req.params["id"])
+                .query('UPDATE programs SET program=@program WHERE programId=@id');
             console.log(req.body);
             res.json({ 'message': 'Programa ' + id + ' Modificado' });
         });
@@ -49,7 +52,7 @@ class ProgramController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const program = yield database_1.default.query('SELECT * FROM programs WHERE programId=?', [id]);
+            const program = (yield (yield database_1.default).request().input("id", req.params["id"]).query('SELECT * FROM programs WHERE programId=@id')).recordset;
             if (program.length > 0) {
                 console.log(program[0]);
                 return res.json(program[0]);

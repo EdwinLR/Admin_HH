@@ -17,13 +17,22 @@ const database_1 = __importDefault(require("../database"));
 class CourseController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const courses = yield database_1.default.query('SELECT c.crn,c.courseName,c.startingDate,f.frequency,s.startingTime, s.endingTime, t.firstName, t.fatherLastName, t.motherLastName, pr.program, p.period FROM courses c, frequencies f, schedules s, teachers t, programs pr, periods p WHERE c.frequencyId=f.frequencyId AND c.scheduleId=s.scheduleId AND c.teacherId=t.teacherId AND c.programId=pr.programId AND c.periodId=p.periodId');
+            const courses = (yield (yield database_1.default).query('SELECT c.crn,c.courseName,c.startingDate,f.frequency,s.startingTime, s.endingTime, u.firstName, u.fatherLastName, u.motherLastName, pr.program, p.period FROM courses c, frequencies f, schedules s, teachers t, programs pr, periods p, users u WHERE c.frequencyId=f.frequencyId AND c.scheduleId=s.scheduleId AND c.teacherId=t.teacherId AND c.programId=pr.programId AND c.periodId=p.periodId AND t.userId=u.userId')).recordset;
             res.json(courses);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query('INSERT INTO courses SET ?', [req.body]);
+            (yield database_1.default).
+                request()
+                .input("courseName", req.body["courseName"])
+                .input("startingDate", req.body["startingDate"])
+                .input("frequencyId", req.body["frequencyId"])
+                .input("scheduleId", req.body["scheduleId"])
+                .input("programId", req.body["programId"])
+                .input("periodId", req.body["periodId"])
+                .input("teacherId", req.body["teacherId"])
+                .query('INSERT INTO courses ( courseName, startingDate, frequencyId, scheduleId, programId, periodId, teacherId) VALUES ( @courseName, @startingDate, @frequencyId, @scheduleId, @programId, @periodId, @teacherId)');
             console.log(req.body);
             res.json({ 'message': "Nuevo Curso Registrado" });
         });
@@ -32,7 +41,10 @@ class CourseController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('DELETE FROM courses WHERE crn=?', [id]);
+            (yield database_1.default)
+                .request()
+                .input("id", id)
+                .query('DELETE FROM courses WHERE crn=@id');
             res.json({ 'message': 'Eliminando Curso ' + id });
         });
     }
@@ -40,7 +52,17 @@ class CourseController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            yield database_1.default.query('UPDATE courses SET ? WHERE crn=?', [req.body, id]);
+            (yield database_1.default).
+                request()
+                .input("id", id)
+                .input("courseName", req.body["courseName"])
+                .input("startingDate", req.body["startingDate"])
+                .input("frequencyId", req.body["frequencyId"])
+                .input("scheduleId", req.body["scheduleId"])
+                .input("programId", req.body["programId"])
+                .input("periodId", req.body["periodId"])
+                .input("teacherId", req.body["teacherId"])
+                .query('UPDATE courses SET courseName=@courseName, startingDate=@startingDate, frequencyId=@frequencyId, scheduleId=@scheduleId, programId=@programId, periodId=@periodId, teacherId=@teacherId WHERE crn=@id');
             console.log(req.body);
             res.json({ 'message': 'Curso ' + id + ' Modificado' });
         });
@@ -49,13 +71,14 @@ class CourseController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
-            const course = yield database_1.default.query('SELECT * FROM courses WHERE crn=?', [id]);
+            const course = (yield (yield database_1.default).request()
+                .input("id", id).query('SELECT * FROM courses WHERE crn=@id')).recordset;
             if (course.length > 0) {
                 console.log(course[0]);
                 return res.json(course[0]);
             }
             else {
-                res.status(404).json({ 'message': 'Curso no encontrado' });
+                res.status(404).json({ 'message': 'Estudiante no encontrado' });
             }
         });
     }

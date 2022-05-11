@@ -1,12 +1,19 @@
-import mysql from 'promise-mysql'
-import keys from './keys';
+import sql from 'mssql';
 
-const pool = mysql.createPool(keys.database);
+const dbSettings=
+{
+   user:'localhost',
+   password:'12345',
+   server:'localhost',
+   database:'BD_SistemaEscolar',
 
-pool.getConnection().then(connection=>{
-    pool.releaseConnection(connection);
-    console.log('Conectando a la BD');
-    
-});
+   options: {
+   encrypt: true, 
+   trustServerCertificate: true
+ }
+};
+
+
+const pool= sql.connect(dbSettings)
 
 export default pool;
