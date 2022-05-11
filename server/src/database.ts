@@ -6,7 +6,6 @@ const dbSettings=
    password:'12345',
    server:'localhost',
    database:'BD_SistemaEscolar',
-
    options: {
    encrypt: true, 
    trustServerCertificate: true

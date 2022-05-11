@@ -2,6 +2,7 @@ import { Component, OnInit,HostBinding } from '@angular/core';
 import { Login } from 'src/app/models/Login';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-login-form',
@@ -20,7 +21,8 @@ export class LoginFormComponent implements OnInit {
   user : any;
   exists : boolean = false;
 
-  constructor(private router: Router, private loginService : LoginService) 
+  constructor(private router: Router, private loginService : LoginService, 
+    private verificatorService : SQLVerificatorService) 
   {
 
   }
@@ -31,6 +33,9 @@ export class LoginFormComponent implements OnInit {
 
   Login()
   {
+    this.login.email = this.verificatorService.VerifyInjection(this.login.email!)
+    this.login.password = this.verificatorService.VerifyInjection(this.login.password!)
+
     this.login.email = this.login.email!.trim();
 
     this.loginService.login(this.login.email!).subscribe(

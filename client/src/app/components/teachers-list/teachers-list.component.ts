@@ -42,7 +42,7 @@ export class TeachersListComponent implements OnInit {
       res =>
       {
         console.log(res);
-        this.router.navigate(['/teachers'])
+        this.ngOnInit()
         
       },
       err => console.error(err)
