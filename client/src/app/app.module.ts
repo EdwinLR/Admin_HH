@@ -30,6 +30,9 @@ import { CoordinatorsListComponent } from './components/coordinators-list/coordi
 import { CoordinatorsFormComponent } from './components/coordinators-form/coordinators-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { RoleListComponent } from './components/role-list/role-list.component';
+import { ScreenFormComponent } from './components/screen-form/screen-form.component';
+import { PermissionFormComponent } from './components/permission-form/permission-form.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { LogoutComponent } from './components/logout/logout.component';
     CoordinatorsListComponent,
     CoordinatorsFormComponent,
     LoginFormComponent,
-    LogoutComponent
+    LogoutComponent,
+    RoleListComponent,
+    ScreenFormComponent,
+    PermissionFormComponent
   ],
   imports: [
     BrowserModule,

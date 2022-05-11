@@ -296,64 +296,78 @@ CREATE TABLE [dbo].[users](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-
-CREATE TABLE screen_control
-(
-    roleId smallint PRIMARY KEY  NOT NULL,
-	coordinators bit NOT NULL,
-	course_details bit NOT NULL,
-	courses bit NOT NULL,
-	frequencies bit NOT NULL,
-	periods bit NOT NULL,
-	permission bit NOT NULL,
-	programs bit NOT NULL,
-	roles bit NOT NULL,
-	schedules bit NOT NULL,
-	screens bit NOT NULL,
-	students bit NOT NULL,
-	teachers bit NOT NULL,
-    
-    FOREIGN KEY (roleId) REFERENCES roles(roleId)
-);
+/****** Object:  Table [dbo].[screen_control]    Script Date: 11/05/2022 12:06:57 p. m. ******/
+SET ANSI_NULLS ON
 GO
 
-CREATE TABLE permission_control
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[screen_control](
+	[roleId] [smallint] NOT NULL,
+	[coordinators] [bit] NOT NULL,
+	[course_details] [bit] NOT NULL,
+	[courses] [bit] NOT NULL,
+	[frequencies] [bit] NOT NULL,
+	[periods] [bit] NOT NULL,
+	[permission] [bit] NOT NULL,
+	[programs] [bit] NOT NULL,
+	[roles] [bit] NOT NULL,
+	[schedules] [bit] NOT NULL,
+	[screens] [bit] NOT NULL,
+	[students] [bit] NOT NULL,
+	[teachers] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
 (
-    roleId smallint PRIMARY KEY  NOT NULL,
-	coordinatorsC bit NOT NULL,
-	coordinatorsD bit NOT NULL,
-	coordinatorsU bit NOT NULL,
-	course_detailsC bit NOT NULL,
-	course_detailsD bit NOT NULL,
-	course_detailsU bit NOT NULL,
-	coursesC bit NOT NULL,
-	coursesD bit NOT NULL,
-	coursesU bit NOT NULL,
-	frequenciesC bit NOT NULL,
-	frequenciesD bit NOT NULL,
-	frequenciesU bit NOT NULL,
-	periodsC bit NOT NULL,
-	periodsD bit NOT NULL,
-	periodsU bit NOT NULL,
-	permissionsU bit NOT NULL,
-	programsC bit NOT NULL,
-	programsD bit NOT NULL,
-	programsU bit NOT NULL,
-	rolesC bit NOT NULL,
-	rolesD bit NOT NULL,
-	schedulesC bit NOT NULL,
-	schedulesD bit NOT NULL,
-	schedulesU bit NOT NULL,
-	screensU bit NOT NULL,
-	studentsC bit NOT NULL,
-	studentsD bit NOT NULL,
-	studentsU bit NOT NULL,
-	teachersC bit NOT NULL,
-	teachersD bit NOT NULL,
-	teachersU bit NOT NULL,
-    
-    FOREIGN KEY (roleId) REFERENCES roles(roleId)
-);
+	[roleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[permission_control]    Script Date: 11/05/2022 12:09:31 p. m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[permission_control](
+	[roleId] [smallint] NOT NULL,
+	[coordinatorsC] [bit] NOT NULL,
+	[coordinatorsD] [bit] NOT NULL,
+	[coordinatorsU] [bit] NOT NULL,
+	[course_detailsC] [bit] NOT NULL,
+	[course_detailsD] [bit] NOT NULL,
+	[course_detailsU] [bit] NOT NULL,
+	[coursesC] [bit] NOT NULL,
+	[coursesD] [bit] NOT NULL,
+	[coursesU] [bit] NOT NULL,
+	[frequenciesC] [bit] NOT NULL,
+	[frequenciesD] [bit] NOT NULL,
+	[frequenciesU] [bit] NOT NULL,
+	[periodsC] [bit] NOT NULL,
+	[periodsD] [bit] NOT NULL,
+	[periodsU] [bit] NOT NULL,
+	[permissionsU] [bit] NOT NULL,
+	[programsC] [bit] NOT NULL,
+	[programsD] [bit] NOT NULL,
+	[programsU] [bit] NOT NULL,
+	[rolesC] [bit] NOT NULL,
+	[rolesD] [bit] NOT NULL,
+	[schedulesC] [bit] NOT NULL,
+	[schedulesD] [bit] NOT NULL,
+	[schedulesU] [bit] NOT NULL,
+	[screensU] [bit] NOT NULL,
+	[studentsC] [bit] NOT NULL,
+	[studentsD] [bit] NOT NULL,
+	[studentsU] [bit] NOT NULL,
+	[teachersC] [bit] NOT NULL,
+	[teachersD] [bit] NOT NULL,
+	[teachersU] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[roleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
 ALTER TABLE [dbo].[course_details] ADD  DEFAULT ((0)) FOR [WQ_1]
 GO
@@ -414,14 +428,6 @@ GO
 ALTER TABLE [dbo].[salaries_report]  WITH CHECK ADD FOREIGN KEY([teacherId])
 REFERENCES [dbo].[teachers] ([teacherId])
 GO
-ALTER TABLE [dbo].[screen_users]  WITH CHECK ADD FOREIGN KEY([screenId])
-REFERENCES [dbo].[screens] ([screenId])
-GO
-ALTER TABLE [dbo].[screen_users]  WITH CHECK ADD  CONSTRAINT [FK__screen_us__userI__5070F446] FOREIGN KEY([userId])
-REFERENCES [dbo].[users] ([userId])
-GO
-ALTER TABLE [dbo].[screen_users] CHECK CONSTRAINT [FK__screen_us__userI__5070F446]
-GO
 ALTER TABLE [dbo].[students]  WITH CHECK ADD  CONSTRAINT [FK__students__userId__2E1BDC42] FOREIGN KEY([userId])
 REFERENCES [dbo].[users] ([userId])
 GO
@@ -439,6 +445,13 @@ REFERENCES [dbo].[roles] ([roleId])
 GO
 ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK__users__roleId__286302EC]
 GO
+ALTER TABLE [dbo].[screen_control]  WITH CHECK ADD FOREIGN KEY([roleId])
+REFERENCES [dbo].[roles] ([roleId])
+GO
+ALTER TABLE [dbo].[permission_control]  WITH CHECK ADD FOREIGN KEY([roleId])
+REFERENCES [dbo].[roles] ([roleId])
+GO
+
 /****** Object:  StoredProcedure [dbo].[CrearTeacher]    Script Date: 11/05/2022 08:16:12 a. m. ******/
 SET ANSI_NULLS ON
 GO
@@ -469,7 +482,7 @@ AS
 	DECLARE @id smallint=0
 	SELECT @id=userId from users WHERE email=@email
 
-	INSERT INTO teachers(userId, rfc,hiringDate) VALUES (@id,@rfc,@hiringDate)
+	INSERT INTO coordinators(userId, rfc, hiringDate) VALUES (@id,@rfc,@hiringDate)
 GO
 
 --Valores default
@@ -497,7 +510,6 @@ EXEC CrearCoordinador 'alejandro@hh.com','BAMA030201Y63','2022-05-11'
 GO
 EXEC CrearTeacher 'eduardo@hh.com','PUME030201Y63','2022-05-11'
 GO
-
 EXEC CrearEstudiante'edwin@hh.com','2022-05-11'
 GO
 
