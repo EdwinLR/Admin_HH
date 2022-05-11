@@ -58,7 +58,7 @@ class CoordinatorController {
     details(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
-            const coordinator = (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users FROM coordinators.userId=users.userId AND coordinatorId=@id');
+            const coordinator = (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
             if ((yield coordinator).recordsets.length > 0) {
                 console.log((yield coordinator).recordsets[0]);
                 return res.json((yield coordinator).recordsets[0]);

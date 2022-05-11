@@ -52,7 +52,10 @@ export class TeachersListComponent implements OnInit {
   
   listTeachers(){
     this.teacherService.getTeachers().subscribe(
-      res => this.teachers=res,
+      res => {
+        this.teachers=res
+        console.log(res)
+      },
       err => console.error(err)
     );
   }

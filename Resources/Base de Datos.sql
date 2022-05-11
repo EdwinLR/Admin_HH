@@ -466,7 +466,7 @@ AS
 GO
 
 
---Código Default 
+--Cï¿½digo Default 
 --Stored Procedure para crear estudiantes
 CREATE   PROCEDURE [dbo].[CrearEstudiante] @email varchar(50),@admissionDate DATE
 AS
@@ -490,20 +490,20 @@ INSERT INTO roles(roleName)
 VALUES ('Administrator'), ('Coordinator'), ('Teacher'), ('Student')
 GO
 
-INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber)
-VALUES (1, 'admin@hh.com', '12345', 'Administrator', 'Harmon', 'Hall', '0000000000')
+INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber, photoUrl)
+VALUES (1, 'admin@hh.com', '12345', 'Administrator', 'Harmon', 'Hall', '0000000000', '')
 GO
 
-INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber)
-VALUES (2, 'alejandro@hh.com', '12345', 'Alejandro', 'Barroeta', 'Martínez', '2222222222')
+INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber, photoUrl)
+VALUES (2, 'alejandro@hh.com', '12345', 'Alejandro', 'Barroeta', 'MartÃ­nez', '2222222222', '')
 GO
 
-INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber)
-VALUES (3, 'eduardo@hh.com', '12345', 'Eduardo', 'Puón', 'Meraz', '2222222222')
+INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber, photoUrl)
+VALUES (3, 'eduardo@hh.com', '12345', 'Eduardo', 'PuÃ³n', 'Meraz', '2222222222', '')
 GO
 
-INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber)
-VALUES (4, 'edwin@hh.com', '12345', 'Edwin', 'Lozada', 'Ramos', '2222222222')
+INSERT INTO users(roleId, email, password, firstName, fatherLastName, motherLastName, phoneNumber, photoUrl)
+VALUES (4, 'edwin@hh.com', '12345', 'Edwin', 'Lozada', 'Ramos', '2222222222', '')
 GO
 
 EXEC CrearCoordinador 'alejandro@hh.com','BAMA030201Y63','2022-05-11'

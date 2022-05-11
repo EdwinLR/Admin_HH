@@ -41,7 +41,7 @@ class CoordinatorController{
 
     public async details(req:Request,res:Response):Promise<any>{
         //Destructurando una parte del objeto de Javascript
-        const coordinator= (await pool).request().input("id",sql.SmallInt,req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users FROM coordinators.userId=users.userId AND coordinatorId=@id');
+        const coordinator= (await pool).request().input("id",sql.SmallInt,req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
 
         if((await coordinator).recordsets.length > 0){
             console.log((await coordinator).recordsets[0]);

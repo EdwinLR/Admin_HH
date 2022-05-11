@@ -124,9 +124,6 @@ dateString : any;
           this.user.photoUrl = '/assets/NoImage.jpg'
         }
 
-        if(this.user.photoUrl == ''){
-          this.user.photoUrl = '/assets/NoImage.jpg'
-        }
         this.usersService.saveUser(this.user).subscribe(res => {
           console.log(res);
         },
