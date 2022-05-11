@@ -4,15 +4,15 @@ import pool from '../database';
 class StudentController{
 
     public async index(req:Request, res:Response ){
-        const students = (await (await pool).query('SELECT students.*, users.* FROM students, users WHERE students.userId=users.userId')).recordset;
+        const students = (await (await pool).query('SELECT students.studentId, students.userId, students.admissionDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId')).recordset;
         res.json(students);
     }
 
     public async create(req:Request, res:Response):Promise<void>{
         (await pool).request()
-        .input("userId",req.body["userId"])
+        .input("email",req.body["email"])
         .input("admissionDate",req.body["admissionDate"])
-        .query('INSERT INTO students (userId, admissionDate) VALUES (@userId, @admissionDate)');
+        .execute('CrearEstudiante');
         console.log(req.body);
         res.json({'message':"Nuevo Estudiante Registrado"});
     }
@@ -30,11 +30,11 @@ class StudentController{
     public async update(req:Request,res:Response):Promise<void>{
         const {id}=req.params;
         (await pool).request()
-        .input("userId",req.body["userId"])
         .input("admissionDate",req.body["admissionDate"])
-        .input("id",id)
-        .query('UPDATE students SET userId=@userId, admissionDate=@admissionDate WHERE studentId=@id');
+        .input("id",req.params["id"])
+        .query('UPDATE students SET admissionDate=@admissionDate WHERE studentId=@id');
         console.log(req.body);
+        
         res.json({'message':'Estudiante con matrícula '+id+ ' Modificado'});
     }
 
@@ -43,8 +43,8 @@ class StudentController{
         const {id}=req.params;
 
         const student=(await(await pool).request()
-        .input("id",req.body["id"])
-        .query('SELECT SELECT students.studentId, students.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId AND studentId=@id')).recordset;
+        .input("id",req.params["id"])
+        .query('SELECT students.studentId, students.userId, students.admissionDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId AND students.studentId=@id')).recordset;
 
         if(student.length > 0){
             console.log(student[0]);

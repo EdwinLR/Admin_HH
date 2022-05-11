@@ -36,28 +36,14 @@ export class CoordinatorsListComponent implements OnInit {
     }
   }
 
-  deleteCoordinator(coordinatorId:string)
+  deleteCoordinator(userId:string)
   {
-    this.coordiantorService.getCoordinator(coordinatorId).subscribe(
-      res => {
-        this.coordinator = res
-      }, err => console.error(err)
-    );
-
-    this.userService.deleteUser(this.coordinator.email).subscribe(
+    this.userService.deleteUser(userId).subscribe(
       res =>
       {
         console.log(res);
-        this.filluser();
-      },
-      err => console.error(err)
-    )
-
-    this.coordiantorService.deleteCoordinator(coordinatorId).subscribe(
-      res=>
-      {
-        console.log(res);
-        this.listCoordinators();
+        this.ngOnInit()
+        
       },
       err => console.error(err)
     )

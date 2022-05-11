@@ -15,9 +15,9 @@ export class CoordinatorsService {
     return this.Http.get('http://localhost:5000/api/coordinators')
   }
 
-  getCoordinator(coordinatoId:string)
+  getCoordinator(coordinatorId:string)
   {
-    return this.Http.get('http://localhost:5000/api/coordinators/'+coordinatoId);
+    return this.Http.get('http://localhost:5000/api/coordinators/'+coordinatorId);
   }
 
   saveCoordinator(coordinator : Coordinator)
@@ -25,13 +25,13 @@ export class CoordinatorsService {
     return this.Http.post('http://localhost:5000/api/coordinators/',coordinator);
   }
 
-  deleteCoordinator(coordinatoId:string)
+  deleteCoordinator(coordinatorId:string)
    {
-    return this.Http.delete('http://localhost:5000/api/coordinators/'+coordinatoId);
+    return this.Http.delete('http://localhost:5000/api/coordinators/'+coordinatorId);
    }
 
-   updateCoordinator(coordinatoId:string | number, coordinator:Coordinator):Observable<Coordinator>
+   updateCoordinator(coordinatorId:string | number, coordinator:Coordinator):Observable<Coordinator>
    {
-     return this.Http.put('http://localhost:5000/api/coordinators/'+coordinatoId,coordinator);
+     return this.Http.put('http://localhost:5000/api/coordinators/'+coordinatorId,coordinator);
    }
 }

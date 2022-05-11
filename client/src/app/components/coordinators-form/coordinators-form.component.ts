@@ -62,10 +62,23 @@ dateString : any;
           {
             console.log(res)
             this.coordinator=res;
-            this.edit=true;
 
             this.dateString = formatDate(this.coordinator.hiringDate!, 'yyyy-MM-dd', this.locale)
             console.log(this.dateString)
+          },
+          err => console.error(err)
+        );
+      }
+
+      if(params['userId'])
+      {
+        this.usersService.getUser(params['userId']).subscribe
+        (
+          res => 
+          {
+            console.log(res)
+            this.user=res;
+            this.edit=true;
           },
           err => console.error(err)
         );
@@ -108,21 +121,21 @@ dateString : any;
         if(this.user.photoUrl == ''){
           this.user.photoUrl = '/assets/NoImage.jpg'
         }
+
         this.usersService.saveUser(this.user).subscribe(res => {
           console.log(res);
         },
         err => console.error(err))
-
-        this.createdUser=this.usersService.getUser(this.user.email!).subscribe()
-        this.coordinator.userId=this.createdUser[0]["userId"];
+        
+        this.coordinator.email=this.user.email;
         
         this.coordinatorsService.saveCoordinator(this.coordinator).subscribe(
           res => {
             console.log(res);
+            this.router.navigate(["/coordinators"]);
           },
           err => console.error(err)
         );
-        
       }
       else{
         alert("No puedes registrar un nuevo usuario con ese correo.")
@@ -138,6 +151,13 @@ dateString : any;
     //console.log(this.teacher);
     //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
   
+   this.usersService.updateUser(this.coordinator.userId!,this.user).subscribe(
+      res =>{
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+
     this.coordinatorsService.updateCoordinator(this.coordinator.coordinatorId!,this.coordinator).subscribe(
       res =>{
         console.log(res);

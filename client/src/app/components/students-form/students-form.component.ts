@@ -23,13 +23,14 @@ user:User=
     email:'',
     phoneNumber:'',
     photoUrl:'',
-  roleId:1,
-  password:'12345'
+    roleId:4,
+    password:'12345'
 
 }
 student : Student=
 {
   studentId:0,
+  email:'',
   admissionDate: new Date(),
 
 };
@@ -64,7 +65,6 @@ dateString : any;
           {
             console.log(res); 
             this.student=res;
-            this.edit=true;
 
             this.dateString = formatDate(this.student.admissionDate!, 'yyyy-MM-dd', this.locale)
             console.log(this.dateString)
@@ -72,10 +72,23 @@ dateString : any;
           err =>console.error(err)
         );
       }
-
+      if(params['userId'])
+      {
+        this.usersService.getUser(params['userId']).subscribe
+        (
+          res => 
+          {
+            console.log(res)
+            this.user=res;
+            this.edit = true;
+          },
+          err => console.error(err)
+        );
+      }
       this.filluser();
     }
-    else{
+    else
+    {
       alert("No tienes permisos para acceder a este apartado.")
       this.router.navigate(['/'])
     }
@@ -112,24 +125,20 @@ dateString : any;
           this.user.photoUrl = '/assets/NoImage.jpg'
         }
 
-        if(this.user.photoUrl == ''){
-            this.user.photoUrl = '/assets/NoImage.jpg'
-          }
-          this.usersService.saveUser(this.user).subscribe(res => {
+        this.usersService.saveUser(this.user).subscribe(res => {
+          console.log(res);
+        },
+        err => console.error(err))
+        
+        this.student.email=this.user.email;
+        
+        this.studentsService.saveStudent(this.student).subscribe(
+          res => {
             console.log(res);
+            this.router.navigate(["/students"]);
           },
-          err => console.error(err))
-  
-          this.createdUser=this.usersService.getUser(this.user.email!).subscribe()
-          this.student.userId=this.createdUser[0]["userId"];
-          
-          this.studentsService.saveStudent(this.student).subscribe(
-            res => {
-              console.log(res);
-              this.router.navigate(['/students']);
-            },
-            err => console.error(err)
-          );
+          err => console.error(err)
+        );
       }
       else{
         alert("No puedes registrar un nuevo usuario con ese correo.")
@@ -142,15 +151,19 @@ dateString : any;
 
   updateStudent()
   {
-   console.log(this.student);
-    this.studentsService.updateStudent(this.student.studentId!,this.student).subscribe
-    (
-    res => 
-    {
-      console.log(res); 
-    this.router.navigate(['/students'])
-     },
-    err =>console.error(err)
+    this.usersService.updateUser(this.student.userId!,this.user).subscribe(
+      res =>{
+        console.log(res);
+      },
+      err => console.error(err)
+    );
+
+    this.studentsService.updateStudent(this.student.studentId!,this.student).subscribe(
+      res =>{
+        console.log(res);
+        this.router.navigate(['/students']);
+      },
+      err => console.error(err)
     );
     
   }

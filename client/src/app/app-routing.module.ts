@@ -185,7 +185,7 @@ const routes: Routes = [
   },
 
   {
-    path:'students/edit/:studentId',
+    path:'students/edit/:studentId/:userId',
     component:StudentsFormComponent
   },
 
@@ -201,7 +201,7 @@ const routes: Routes = [
   },
 
   {
-    path:'coordinators/edit/:coordinatorId',
+    path:'coordinators/edit/:coordinatorId/:userId',
     component:CoordinatorsFormComponent
   },
   {

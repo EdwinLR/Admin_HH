@@ -11,14 +11,14 @@
                 {{student.studentId}}
                 
               <!--Borrar--> 
-               <button (click)="deleteStudent(student.studentId)" class="btn btn-danger"> <i class="fa-solid fa-trash-can"></i></button>
+               <button (click)="deleteStudent(student.userId)" class="btn btn-danger"> <i class="fa-solid fa-trash-can"></i></button>
             </div>
-        <img [src]="student.photourl" alt = "Image" class = "card-img-top" width="720" height="420" > 
+        <img [src]="student.photoUrl" alt = "Image" class = "card-img-top" width="720" height="420" > 
             <div class="card-body">
                 <p>{{student.firstName}}</p>
                 <p>{{student.fatherLastName}}</p>
                 <p>{{student.email}}</p>
-               <a [routerLink]="['/students/edit',student.studentId]"  class="btn btn-info" > <i class="fa-solid fa-pen-to-square"></i> </a>
+               <a [routerLink]="['/students/edit',student.studentId,student.userId]"  class="btn btn-info" > <i class="fa-solid fa-pen-to-square"></i> </a>
         </div>
 
     </div>

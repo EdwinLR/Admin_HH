@@ -17,16 +17,16 @@ const database_1 = __importDefault(require("../database"));
 class StudentController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const students = (yield (yield database_1.default).query('SELECT students.*, users.* FROM students, users WHERE students.userId=users.userId')).recordset;
+            const students = (yield (yield database_1.default).query('SELECT students.studentId, students.userId, students.admissionDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId')).recordset;
             res.json(students);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             (yield database_1.default).request()
-                .input("userId", req.body["userId"])
+                .input("email", req.body["email"])
                 .input("admissionDate", req.body["admissionDate"])
-                .query('INSERT INTO students (userId, admissionDate) VALUES (@userId, @admissionDate)');
+                .execute('CrearEstudiante');
             console.log(req.body);
             res.json({ 'message': "Nuevo Estudiante Registrado" });
         });
@@ -46,10 +46,9 @@ class StudentController {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             (yield database_1.default).request()
-                .input("userId", req.body["userId"])
                 .input("admissionDate", req.body["admissionDate"])
-                .input("id", id)
-                .query('UPDATE students SET userId=@userId, admissionDate=@admissionDate WHERE studentId=@id');
+                .input("id", req.params["id"])
+                .query('UPDATE students SET admissionDate=@admissionDate WHERE studentId=@id');
             console.log(req.body);
             res.json({ 'message': 'Estudiante con matrícula ' + id + ' Modificado' });
         });
@@ -59,8 +58,8 @@ class StudentController {
             //Destructurando una parte del objeto de Javascript
             const { id } = req.params;
             const student = (yield (yield database_1.default).request()
-                .input("id", req.body["id"])
-                .query('SELECT SELECT students.studentId, students.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId AND studentId=@id')).recordset;
+                .input("id", req.params["id"])
+                .query('SELECT students.studentId, students.userId, students.admissionDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM students, users WHERE students.userId=users.userId AND students.studentId=@id')).recordset;
             if (student.length > 0) {
                 console.log(student[0]);
                 return res.json(student[0]);

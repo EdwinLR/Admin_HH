@@ -18,17 +18,17 @@ const mssql_1 = __importDefault(require("mssql"));
 class CoordinatorController {
     index(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const coordinators = (yield (yield database_1.default).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId')).recordset;
+            const coordinators = (yield (yield database_1.default).query('SELECT coordinators.coordinatorId, coordinators.userId, coordinators.rfc, coordinators.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM coordinators, users WHERE coordinators.userId=users.userId')).recordset;
             res.json(coordinators);
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             (yield database_1.default).request()
-                .input("userId", req.body["userId"])
+                .input("email", req.body["email"])
                 .input("rfc", req.body["rfc"])
                 .input("hiringDate", req.body["hiringDate"])
-                .query('INSERT INTO coordinators (userId,rfc,hiringDate) VALUES (@userId, @rfc, @hiringDate)');
+                .execute('CrearCoordinador');
             console.log(req.body);
             res.json({ 'message': "Nuevo Coordinador Registrado" });
         });
@@ -49,7 +49,7 @@ class CoordinatorController {
                 .input("userId", req.body["userId"])
                 .input("rfc", req.body["rfc"])
                 .input("hiringDate", req.body["hiringDate"])
-                .input("id", req.params)
+                .input("id", req.params["id"])
                 .query('UPDATE coordinators SET userId=@userId, rfc=@rfc, hiringDate=@hiringDate WHERE coordinatorId=@id');
             console.log(req.body);
             res.json({ 'message': 'Coordinador con matrícula ' + id + ' Modificado' });
@@ -59,12 +59,12 @@ class CoordinatorController {
         return __awaiter(this, void 0, void 0, function* () {
             //Destructurando una parte del objeto de Javascript
             const coordinator = (yield database_1.default).request().input("id", mssql_1.default.SmallInt, req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
-            if ((yield coordinator).recordsets.length > 0) {
-                console.log((yield coordinator).recordsets[0]);
-                return res.json((yield coordinator).recordsets[0]);
+            if (coordinator.length > 0) {
+                console.log(coordinator[0]);
+                return res.json(coordinator[0]);
             }
             else {
-                res.status(404).json({ 'message': 'Coordinador no encontrado' });
+                res.status(404).json({ 'message': 'Teacher no encontrado' });
             }
         });
     }

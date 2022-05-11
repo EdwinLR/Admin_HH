@@ -19,9 +19,9 @@ export class StudentsService {
     return this.http.get('http://localhost:5000/api/students');
   }
 
-  getStudent(id:string)
+  getStudent(studentId:string)
   {
-    return this.http.get('http://localhost:5000/api/students/'+id);
+    return this.http.get('http://localhost:5000/api/students/'+studentId);
   }
 
   saveStudent(student :Student)

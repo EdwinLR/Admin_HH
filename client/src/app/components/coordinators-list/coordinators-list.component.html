@@ -6,9 +6,9 @@
     <div class="card text-center">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" >
              {{coordinator.coordinatorId}}
-            <button class="btn btn-danger" (click)="deleteCoordinator(coordinator.coordinatorId)"><i class="fa-solid fa-minus"></i></button>
+            <button class="btn btn-danger" (click)="deleteCoordinator(coordinator.userId)"><i class="fa-solid fa-minus"></i></button>
         </div>
-        <img [src]="coordinator.photourl" class="card-img-top" width="720" height="420">
+        <img [src]="coordinator.photoUrl" class="card-img-top" width="720" height="420">
         <div class="card-body">
             <p>{{coordinator.firstName}} 
                 {{coordinator.fatherLastName}}
@@ -17,7 +17,7 @@
             <p>{{coordinator.rfc}} </p>
             <p>{{coordinator.email}} </p>
             <p>{{coordinator.phoneNumber}} </p>
-            <a [routerLink]="['edit/',coordinator.coordinatorId]" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a>
+            <a [routerLink]="['edit/',coordinator.coordinatorId,coordinator.userId]" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a>
         </div>
     </div>
 </div>

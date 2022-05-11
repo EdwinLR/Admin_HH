@@ -5,16 +5,16 @@ import sql from 'mssql'
 class CoordinatorController{
 
     public async index(req:Request, res:Response ){
-        const coordinators = (await (await pool).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId')).recordset;
+        const coordinators = (await (await pool).query('SELECT coordinators.coordinatorId, coordinators.userId, coordinators.rfc, coordinators.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM coordinators, users WHERE coordinators.userId=users.userId')).recordset;
         res.json(coordinators);
     }
     
     public async create(req:Request, res:Response):Promise<void>{
         (await pool).request()
-        .input("userId",req.body["userId"])
+        .input("email",req.body["email"])
         .input("rfc",req.body["rfc"])
         .input("hiringDate",req.body["hiringDate"])
-        .query('INSERT INTO coordinators (userId,rfc,hiringDate) VALUES (@userId, @rfc, @hiringDate)');
+        .execute('CrearCoordinador');
         console.log(req.body);
         res.json({'message':"Nuevo Coordinador Registrado"});
     }
@@ -33,7 +33,7 @@ class CoordinatorController{
         .input("userId",req.body["userId"])
         .input("rfc",req.body["rfc"])
         .input("hiringDate",req.body["hiringDate"])
-        .input("id",req.params)
+        .input("id",req.params["id"])
         .query('UPDATE coordinators SET userId=@userId, rfc=@rfc, hiringDate=@hiringDate WHERE coordinatorId=@id');
         console.log(req.body);
         res.json({'message':'Coordinador con matrícula '+id+ ' Modificado'});
@@ -41,14 +41,18 @@ class CoordinatorController{
 
     public async details(req:Request,res:Response):Promise<any>{
         //Destructurando una parte del objeto de Javascript
+<<<<<<< Updated upstream
         const coordinator= (await pool).request().input("id",sql.SmallInt,req.params["id"]).query('SELECT coordinators.*, users.* FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinatorId=@id');
+=======
+        const coordinator= (await(await pool).request().input("id",req.params["id"]).query('SELECT coordinators.coordinatorId, coordinators.userId, coordinators.rfc, coordinators.hiringDate, users.firstName, users.fatherLastName, users.motherLastName, users.phoneNumber, users.email, users.photoUrl FROM coordinators, users WHERE coordinators.userId=users.userId AND coordinators.coordinatorId=@id')).recordset;
+>>>>>>> Stashed changes
 
-        if((await coordinator).recordsets.length > 0){
-            console.log((await coordinator).recordsets[0]);
-            return res.json((await coordinator).recordsets[0]);
+        if(coordinator.length > 0){
+            console.log(coordinator[0]);
+            return res.json(coordinator[0]);
         }  
         else {
-            res.status(404).json({'message':'Coordinador no encontrado'});
+            res.status(404).json({'message':'Teacher no encontrado'});
         }
     }
 }
