@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { TeachersListComponent } from './components/teachers-list/teachers-list.component';
@@ -23,6 +23,8 @@ import { CoordinatorsFormComponent } from './components/coordinators-form/coordi
 import { CoordinatorsListComponent } from './components/coordinators-list/coordinators-list.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { StudentbyMonthListComponent } from './components/studentby-month-list/studentby-month-list.component';
+import { StudentbyMonthFormComponent } from './components/studentby-month-form/studentby-month-form.component';
 
 const routes: Routes = [
   {
@@ -215,6 +217,14 @@ const routes: Routes = [
   {
     path: 'logout',
     component : LogoutComponent
+  },
+  {
+    path: 'studentbyMonth',
+    component : StudentbyMonthFormComponent
+  },
+  {
+    path: 'students/StudentsbyMonth/:month/:year',
+    component : StudentbyMonthListComponent
   },
   //Sin coincidencias
   {

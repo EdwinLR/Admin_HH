@@ -12,6 +12,7 @@ class ProgramController{
         (await pool).request().input("program",req.body["program"]).query('INSERT INTO programs (program) VALUES (@program)');
         console.log(req.body);
         res.json({'message':"Nuevo Programa Registrado"});
+    
     }
     
     //Método para eliminar un registro

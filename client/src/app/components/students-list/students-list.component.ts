@@ -53,5 +53,4 @@ export class StudentsListComponent implements OnInit {
       err=> console.error(err)
     );
   }
-
 }

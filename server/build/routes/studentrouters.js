@@ -13,6 +13,7 @@ class StudentRoutes {
         this.router.delete('/:id', studentController_1.studentController.delete);
         this.router.put('/:id', studentController_1.studentController.update);
         this.router.get('/:id', studentController_1.studentController.details);
+        this.router.get('/StudentsbyMonth/:month/:year', studentController_1.studentController.getStudentbyMonth);
     }
 }
 const studentRoutes = new StudentRoutes();

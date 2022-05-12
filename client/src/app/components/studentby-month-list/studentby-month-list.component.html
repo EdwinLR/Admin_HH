@@ -1,0 +1,20 @@
+
+<div class="col-md-4" *ngFor="let studentbyMonth of studentsbyMonth">
+    <br>
+    <div class="card text-center">
+
+        <div class="card-header bg-dark text-white  d-flex justify-content-between align-items-center">
+                {{studentbyMonth.studentId}}
+                
+            </div>
+        <!-- <img [src]="studentbyMonth.photoUrl" alt = "Image" class = "card-img-top" width="720" height="420" >  -->
+            <div class="card-body">
+                <p>{{studentbyMonth.firstName}}</p>
+                <p>{{studentbyMonth.fatherLastName}}</p>
+                <p>{{studentbyMonth.email}}</p>
+                <!-- <p>{{studentbyMont.admissionDate}}</p> -->
+               <!-- <a [routerLink]="['/students/edit',student.studentId,student.userId]"  class="btn btn-info" > <i class="fa-solid fa-pen-to-square"></i> </a> -->
+        </div>
+
+    </div>
+</div>

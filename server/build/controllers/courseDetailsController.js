@@ -32,9 +32,9 @@ class StudentsCoursesController {
         return __awaiter(this, void 0, void 0, function* () {
             (yield database_1.default)
                 .request()
-                .input("course", req.body["courseId"])
-                .input("student", req.body["studentId"])
-                .query('INSERT INTO course_details (courseId, studentId) VALUES (@courseId, studentId)');
+                .input("courseId", req.body["courseId"])
+                .input("studentId", req.body["studentId"])
+                .query('INSERT INTO course_details (courseId, studentId) VALUES (@courseId, @studentId)');
             console.log(req.body);
             res.json({ 'message': "Nueva Lista de Calificaciones Creada" });
         });

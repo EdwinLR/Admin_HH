@@ -12,6 +12,7 @@ class SepPeriodController{
         await (await pool).request().input("period",req.body["period"]).query('INSERT INTO periods (period) VALUES (@period)');
         console.log(req.body);
         res.json({'message':"Nuevo Periodo Registrado"});
+        
     }
 
     //Método para eliminar un registro

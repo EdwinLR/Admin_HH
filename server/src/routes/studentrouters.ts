@@ -16,6 +16,7 @@ class StudentRoutes{
         this.router.delete('/:id',studentController.delete);
         this.router.put('/:id',studentController.update);
         this.router.get('/:id',studentController.details);
+        this.router.get('/StudentsbyMonth/:month/:year',studentController.getStudentbyMonth)
     }
 }
 

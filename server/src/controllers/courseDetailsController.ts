@@ -17,9 +17,9 @@ class StudentsCoursesController{
     public async create(req:Request, res:Response):Promise<void>{
         (await pool)
         .request()
-        .input("course",req.body["courseId"])
-        .input("student",req.body["studentId"])
-        .query('INSERT INTO course_details (courseId, studentId) VALUES (@courseId, studentId)');
+        .input("courseId",req.body["courseId"])
+        .input("studentId",req.body["studentId"])
+        .query('INSERT INTO course_details (courseId, studentId) VALUES (@courseId, @studentId)');
         console.log(req.body);
         res.json({'message':"Nueva Lista de Calificaciones Creada"});
     }
@@ -51,6 +51,7 @@ class StudentsCoursesController{
         .input("finalGrade",req.body["final_Grade"])
         .query('UPDATE course_details SET WQ_1=@wq1,WQ_2=@wq2, WQ_3=@wq3,OQ_1=@oq1,OQ_2=@oq2,OQ_3=@oq3,WQ_1=@wq1,CP_1=@cp1,CP_2=@cp2,CP_3=@cp3,final_Project=@finalProject,final_Grade=@finalGrade WHERE studentId=@id');
         res.json({'message':'Eliminando Lista de Calificaciones del curso '+id+ ' Modificada'});
+
     }
 
     public async details(req:Request,res:Response):Promise<any>{

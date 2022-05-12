@@ -36,4 +36,8 @@ export class StudentsService {
   {
     return this.http.put('http://localhost:5000/api/students/'+studentId,student);
   }
+  getStudentbyMonth(month : string, year : string)
+  {
+    return this.http.get ('http://localhost:5000/api/students/StudentsbyMonth/'+month+'/'+year)
+  }
 }
