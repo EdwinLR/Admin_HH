@@ -33,6 +33,8 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { RoleListComponent } from './components/role-list/role-list.component';
 import { ScreenFormComponent } from './components/screen-form/screen-form.component';
 import { PermissionFormComponent } from './components/permission-form/permission-form.component';
+import { SalariesFormComponent } from './components/salaries-form/salaries-form.component';
+import { SalariesListComponent } from './components/salaries-list/salaries-list.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { PermissionFormComponent } from './components/permission-form/permission
     LogoutComponent,
     RoleListComponent,
     ScreenFormComponent,
-    PermissionFormComponent
+    PermissionFormComponent,
+    SalariesFormComponent,
+    SalariesListComponent
   ],
   imports: [
     BrowserModule,

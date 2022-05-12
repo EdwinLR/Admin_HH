@@ -46,9 +46,10 @@ class CoordinatorController{
         if(coordinator.length > 0){
             console.log(coordinator[0]);
             return res.json(coordinator[0]);
+
         }  
         else {
-            res.status(404).json({'message':'Teacher no encontrado'});
+            res.status(404).json({'message':'Coordinador no encontrado'});
         }
     }
 }

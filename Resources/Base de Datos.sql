@@ -204,13 +204,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[salaries_report](
 	[teacherId] [int] NOT NULL,
-	[taxId] [smallint] NOT NULL,
 	[emissionDate] [decimal](4, 2) NOT NULL,
 	[total] [decimal](10, 2) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
-	[teacherId] ASC,
-	[taxId] ASC
+	[teacherId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -253,6 +251,7 @@ GO
 CREATE TABLE [dbo].[taxes](
 	[taxId] [smallint] IDENTITY(1,1) NOT NULL,
 	[taxValue] [decimal](4, 2) NOT NULL,
+	[taxType][varchar](50) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[taxId] ASC
@@ -485,6 +484,24 @@ AS
 	INSERT INTO coordinators(userId, rfc, hiringDate) VALUES (@id,@rfc,@hiringDate)
 GO
 
+--Stored procedure para calcular la nómina de cada empleado
+CREATE OR ALTER PROCEDURE CalcularNominaQuincenal @teacher smallint,@fecha DATE, @horasTrabajadas decimal(6,2)
+AS
+	DECLARE @Iva1 decimal(10,2)=0.0;
+	DECLARE @totalSinImpuestos decimal(10,2)=@horasTrabajadas*90;
+	SELECT @Iva1=@totalSinImpuestos*taxValue FROM taxes WHERE taxValue=0.16;
+	DECLARE @totalConIva decimal(10,2) =@totalSinImpuestos+@Iva1;
+	DECLARE @Iva2 decimal(10,2)=0.0;
+	DECLARE @Isr decimal(10,2)=0.0;
+	DECLARE @total decimal(10,2)=0.0;
+
+	SELECT @Iva2=@totalSinImpuestos*taxValue FROM taxes WHERE taxValue=0.11;
+	SELECT @Isr=@totalSinImpuestos*taxValue FROM taxes WHERE taxValue=0.10;
+
+	SET @total= @totalConIva-@Iva2-@Isr;
+	INSERT INTO salaries_report(teacherId,emissionDate,total) VALUES (@teacher,@fecha,@total)
+GO
+
 --Valores default
 INSERT INTO roles(roleName)
 VALUES ('Administrator'), ('Coordinator'), ('Teacher'), ('Student')
@@ -524,6 +541,11 @@ INSERT INTO permission_control VALUES(3,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 GO
 INSERT INTO screen_control VALUES(4,0,0,0,0,0,0,0,0,0,0,0,0)
 INSERT INTO permission_control VALUES(4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+GO
+
+INSERT INTO taxes VALUES(0.16, 'IVA (16%)')
+INSERT INTO taxes VALUES(0.11, 'IVA (11%)')
+INSERT INTO taxes VALUES(0.10, 'ISR (10%)')
 GO
 
 USE [master]

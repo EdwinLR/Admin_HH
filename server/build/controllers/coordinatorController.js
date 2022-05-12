@@ -63,7 +63,7 @@ class CoordinatorController {
                 return res.json(coordinator[0]);
             }
             else {
-                res.status(404).json({ 'message': 'Teacher no encontrado' });
+                res.status(404).json({ 'message': 'Coordinador no encontrado' });
             }
         });
     }
