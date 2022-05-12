@@ -2,7 +2,9 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseDetailsService } from 'src/app/services/course-details.service';
 import { LoginService } from 'src/app/services/login.service';
-
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
+  
 @Component({
   selector: 'app-course-details-list',
   templateUrl: './course-details-list.component.html',
@@ -13,19 +15,13 @@ export class CourseDetailsListComponent implements OnInit {
   courseDetails : any = [];
   id : any;
   constructor(private courseDetailService : CourseDetailsService, private route : ActivatedRoute, 
-    private router : Router, private loginService : LoginService) { }
+    private router : Router, private loginService : LoginService, private screenService : ScreensService) { }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1' || role == '2'){
-      this.id = this.route.snapshot.paramMap.get('id')
-      this.getListCourseDetails(this.id);
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
-    
+    this.id = this.route.snapshot.paramMap.get('id')
+    this.getListCourseDetails(this.id);
+
+    this.verifyAccess();
   }
   
   getListCourseDetails(studentId : string) : void {
@@ -48,5 +44,25 @@ export class CourseDetailsListComponent implements OnInit {
       },
       err => console.log(err)
     );
+  }
+  
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+
+          if(!screenPermissions.course_details){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/courses'])
+          }
+        },
+        err => console.error(err)
+      );
   }
 }

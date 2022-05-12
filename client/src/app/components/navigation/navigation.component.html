@@ -1,82 +1,60 @@
-<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #000000;" >
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000000;" >
 
-    <div class=" container-fluid">
+    <div class="container-fluid">
       <img src="/assets/HH.jpeg" height="50" width="250" >
      
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div *ngIf="roleId == 1">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto"> <!--ms-auto alinear todo-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/" routerLinkActive="Active"></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/frequencies" routerLinkActive="Active"><i class="fa-solid fa-clock"></i> Frequencies</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/periods" routerLinkActive="Active"><i class="fa-solid fa-calendar-day"></i> Periods</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/schedules" routerLinkActive="Active"><i class="fa-solid fa-hourglass"></i> Schedules</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/programs" routerLinkActive="Active"><i class="fa-solid fa-sheet-plastic"></i> Programs</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/courses" routerLinkActive="Active"><i class="fa-solid fa-people-group"></i> Courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/teachers" routerLinkActive="Active"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/students" routerLinkActive="Active"><i class="fa-solid fa-graduation-cap"></i> Students</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/coordinators" routerLinkActive="Active"><i class="fa-solid fa-user-tie"></i> Coordinators</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/logout" routerLinkActive="Active"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div *ngIf="roleId == 2">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto"> <!--ms-auto alinear todo-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/courses" routerLinkActive="Active"><i class="fa-solid fa-people-group"></i> Courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/students" routerLinkActive="Active"><i class="fa-solid fa-graduation-cap"></i> Students</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/logout" routerLinkActive="Active"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div *ngIf="roleId == 3">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto"> <!--ms-auto alinear todo-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/logout" routerLinkActive="Active"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div *ngIf="roleId == 0">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto"> <!--ms-auto alinear todo-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLink="/login" routerLinkActive="Active"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-            </li>
-          </ul>
+      <div class="navbar-collapse collapse" id="navbarSupportedContent">
+        <div class="navbar-nav ms-auto pe-5"> <!--ms-auto alinear todo-->
+          
+          <div *ngIf="roleId != 0" class="d-table-cell">
+  
+            <div *ngIf="screensControl.frequencies" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/frequencies" routerLinkActive="Active"><i class="fa-solid fa-clock"></i> Frequencies</a>
+            </div>
+  
+            <div *ngIf="screensControl.periods" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/periods" routerLinkActive="Active"><i class="fa-solid fa-calendar-day"></i> Periods</a>
+            </div>
+            
+            <div *ngIf="screensControl.schedules" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/schedules" routerLinkActive="Active"><i class="fa-solid fa-hourglass"></i> Schedules</a>
+            </div>
+            
+            <div *ngIf="screensControl.programs" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/programs" routerLinkActive="Active"><i class="fa-solid fa-sheet-plastic"></i> Programs</a>
+            </div>
+            
+            <div *ngIf="screensControl.courses" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/courses" routerLinkActive="Active"><i class="fa-solid fa-people-group"></i> Courses</a>
+            </div>
+            
+            <div *ngIf="screensControl.teachers" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/teachers" routerLinkActive="Active"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+            </div>
+            
+            <div *ngIf="screensControl.students" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/students" routerLinkActive="Active"><i class="fa-solid fa-graduation-cap"></i> Students</a>
+            </div>
+            
+            <div *ngIf="screensControl.coordinators" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/coordinators" routerLinkActive="Active"><i class="fa-solid fa-user-tie"></i> Coordinators</a>
+            </div>
+            
+            <div *ngIf="screensControl.roles" class="d-table-cell">
+              <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/roles" routerLinkActive="Active"><i class="fa-solid fa-users-gear"></i> Roles</a>
+            </div>
+            
+            <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/logout" routerLinkActive="Active"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+          </div>
+          
+          <div *ngIf="roleId == 0">
+            <a class="nav-item nav-link active d-table-cell" aria-current="page" routerLink="/login" routerLinkActive="Active"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+          </div>
+          
         </div>
       </div>
 

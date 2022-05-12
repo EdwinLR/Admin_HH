@@ -2,11 +2,9 @@ import { Component, OnInit,HostBinding, Host } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User';
 import { Router,ActivatedRoute } from '@angular/router';
-import { ThisReceiver } from '@angular/compiler';
 import { Student } from 'src/app/models/Student';
 import { StudentsService } from 'src/app/services/students.service';
 import { LoginService } from 'src/app/services/login.service';
-import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-users-form',

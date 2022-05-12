@@ -1,0 +1,35 @@
+export interface Permission
+{
+    roleId? : number;
+    coordinatorsC? : boolean;
+    coordinatorsD? : boolean;
+    coordinatorsU? : boolean;
+    course_detailsC? : boolean;
+    course_detailsD? : boolean;
+    course_detailsU? : boolean;
+    coursesC? : boolean;
+    coursesD? : boolean;
+    coursesU? : boolean;
+    frequenciesC? : boolean;
+    frequenciesD? : boolean;
+    frequenciesU? : boolean;
+    periodsC? : boolean;
+    periodsD? : boolean;
+    periodsU? : boolean;
+    permissionsU? : boolean;
+    programsC? : boolean;
+    programsD? : boolean;
+    programsU? : boolean;
+    rolesC? : boolean;
+    rolesD? : boolean;
+    schedulesC? : boolean;
+    schedulesD? : boolean;
+    schedulesU? : boolean;
+    screensU? : boolean;
+    studentsC? : boolean;
+    studentsD? : boolean;
+    studentsU? : boolean;
+    teachersC? : boolean;
+    teachersD? : boolean;
+    teachersU? : boolean;
+}

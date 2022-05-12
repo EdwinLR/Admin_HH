@@ -1,0 +1,197 @@
+<div class="col-md-8 offset-md-2">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <input class="form-control" type="text" name="roleId" placeholder="Rol" [(ngModel)]="screensControl.roleId" [disabled]="true">
+                </div>
+            </form>
+            <table class="table" style="text-align:center;">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                        </th>
+                        <th scope="col">
+                            <label>CREAR</label>
+                        </th>
+                        <th scope="col">
+                            <label>ELIMINAR</label>
+                        </th>
+                        <th scope="col">
+                            <label>ACTUALIZAR</label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label>Cursos</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="CoursesC" id="coursesC"[(ngModel)]="permissionControl.coursesC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="CoursesD" id="coursesD"[(ngModel)]="permissionControl.coursesD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="CoursesU" id="coursesU"[(ngModel)]="permissionControl.coursesU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Lista de Curso</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="course_detailsC" id="course_detailsC"[(ngModel)]="permissionControl.course_detailsC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="course_detailsD" id="course_detailsD"[(ngModel)]="permissionControl.course_detailsD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="course_detailsU" id="course_detailsU"[(ngModel)]="permissionControl.course_detailsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Periodos</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="periodsC" id="periodsC"[(ngModel)]="permissionControl.periodsC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="periodsD" id="periodsD"[(ngModel)]="permissionControl.periodsD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="periodsU" id="periodsU"[(ngModel)]="permissionControl.periodsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Frequencias</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="frequenciesC" id="frequenciesC"[(ngModel)]="permissionControl.frequenciesC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="frequenciesD" id="frequenciesD"[(ngModel)]="permissionControl.frequenciesD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="frequenciesU" id="frequenciesU"[(ngModel)]="permissionControl.frequenciesU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Programas</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="programsC" id="programsC"[(ngModel)]="permissionControl.programsC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="programsD" id="programsD"[(ngModel)]="permissionControl.programsD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="programsU" id="programsU"[(ngModel)]="permissionControl.programsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Horarios</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="schedulesC" id="schedulesC"[(ngModel)]="permissionControl.schedulesC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="schedulesD" id="schedulesD"[(ngModel)]="permissionControl.schedulesD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="schedulesU" id="schedulesU"[(ngModel)]="permissionControl.schedulesU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Coordinadores</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="coordinatorsC" id="coordinatorsC"[(ngModel)]="permissionControl.coordinatorsC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="coordinatorsD" id="coordinatorsD"[(ngModel)]="permissionControl.coordinatorsD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="coordinatorsU" id="coordinatorsU"[(ngModel)]="permissionControl.coordinatorsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Profesores</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="teachersC" id="teachersC"[(ngModel)]="permissionControl.teachersC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="teachersD" id="teachersD"[(ngModel)]="permissionControl.teachersD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="teachersU" id="teachersU"[(ngModel)]="permissionControl.teachersU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Estudiantes</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="studentsC" id="studentsC"[(ngModel)]="permissionControl.studentsC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="studentsD" id="studentsD"[(ngModel)]="permissionControl.studentsD"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="studentsU" id="studentsU"[(ngModel)]="permissionControl.studentsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Roles</label>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="rolesC" id="rolesC"[(ngModel)]="permissionControl.rolesC"/>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="rolesD" id="rolesD"[(ngModel)]="permissionControl.rolesD"/>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Permisos</label>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="permissionsU" id="permissionsU"[(ngModel)]="permissionControl.permissionsU"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Permisos de Pantallas</label>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <input class="form-check-input" type="checkbox" name="screensU" id="screensU"[(ngModel)]="permissionControl.screensU"/>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <br>
+            <button class="btn btn-success" (click)="updateScreens()" > Guardar</button>
+        </div>
+    </div>
+</div>

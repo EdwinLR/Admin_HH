@@ -10,6 +10,8 @@ const frequencyroutes_1 = __importDefault(require("./routes/frequencyroutes"));
 const programroutes_1 = __importDefault(require("./routes/programroutes"));
 const scheduleroutes_1 = __importDefault(require("./routes/scheduleroutes"));
 const roleroutes_1 = __importDefault(require("./routes/roleroutes"));
+const permissionRoutes_1 = __importDefault(require("./routes/permissionRoutes"));
+const screenRoutes_1 = __importDefault(require("./routes/screenRoutes"));
 const periodroutes_1 = __importDefault(require("./routes/periodroutes"));
 const userroutes_1 = __importDefault(require("./routes/userroutes"));
 const coordinatorroutes_1 = __importDefault(require("./routes/coordinatorroutes"));
@@ -18,6 +20,7 @@ const teacherRoutes_1 = __importDefault(require("./routes/teacherRoutes"));
 const courseroutes_1 = __importDefault(require("./routes/courseroutes"));
 const coursedetailsroutes_1 = __importDefault(require("./routes/coursedetailsroutes"));
 const loginroutes_1 = __importDefault(require("./routes/loginroutes"));
+const salaryroutes_1 = __importDefault(require("./routes/salaryroutes"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -41,6 +44,8 @@ class Server {
         this.app.use('/api/programs', programroutes_1.default);
         this.app.use('/api/schedules', scheduleroutes_1.default);
         this.app.use('/api/roles', roleroutes_1.default);
+        this.app.use('/api/screens', screenRoutes_1.default);
+        this.app.use('/api/permissions', permissionRoutes_1.default);
         this.app.use('/api/periods', periodroutes_1.default);
         this.app.use('/api/users', userroutes_1.default);
         this.app.use('/api/coordinators', coordinatorroutes_1.default);
@@ -49,6 +54,7 @@ class Server {
         this.app.use("/api/courses", courseroutes_1.default);
         this.app.use("/api/courseDetails", coursedetailsroutes_1.default);
         this.app.use("/api/login", loginroutes_1.default);
+        this.app.use('/api/payments', salaryroutes_1.default);
     }
 }
 const server = new Server();

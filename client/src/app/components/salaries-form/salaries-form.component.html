@@ -1,0 +1,43 @@
+<div class="col-md-4 offset-md-2">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label>Costo Por Hora</label>
+                    <input disabled placeholder="90" type="text" name="costoHora" class="form-control" autofocus/>
+                </div>
+                <div class="form-group">
+                    <label>Horas Trabajadas</label>
+                    <input placeholder="Horas Trabajadas" type="text" name="horasTrabajadas" class="form-control" [(ngModel)]="payment.horasTrabajadas" autofocus/>
+                </div>
+                <div class="form-group">
+                    <label>IVA (16%)</label>
+                    <input disabled type="text" name="IVA16" class="form-control" [(ngModel)]="iva16"/>
+                </div>
+                <div class="form-group">
+                    <label>ISR (10%)</label>
+                    <input disabled placeholder="isr" type="text" name="ISR" class="form-control" [(ngModel)]="isr" />
+                </div>
+                <div class="form-group">
+                    <label>IVA (11%)</label>
+                    <input disabled placeholder="iva11" type="text" name="IVA11" class="form-control" [(ngModel)]="iva11"/>
+                </div>
+                <div class="form-group">
+                    <label>Total</label>
+                    <input disabled placeholder="total" type="text" name="total" class="form-control" [(ngModel)]="total"/>
+                </div>
+                <br>
+                <button class="btn btn-success" (click)="calculateSalary()" >Calcular</button>
+                <button style="margin-left: 10px;"  class="btn btn-success" (click)="saveSalary()" >Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="card card-body text-center">
+        <h1>{{teacherId}} | {{total==0?'$ Total': '$'+total}}</h1>
+        <p>{{payment.fechaPago | date:'yyyy-MM-dd'}}</p>
+    </div>
+</div>
+
+

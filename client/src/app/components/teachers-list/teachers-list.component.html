@@ -18,6 +18,7 @@
             <p>{{teacher.email}} </p>
             <p>{{teacher.phoneNumber}} </p>
             <a [routerLink]="['/teachers/edit',teacher.teacherId,teacher.userId]" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a>
+            <a style="margin-left: 10px;" [routerLink]="['/payments/',teacher.teacherId]" class="btn btn-info"><i class="fa-solid fa-dollar-sign"></i></a>
         </div>
     </div>
 </div>

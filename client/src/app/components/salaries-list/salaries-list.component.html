@@ -1,0 +1,21 @@
+<div>
+    <a class="btn btn-success" [routerLink]="['/payments',teacherId,getDate]" routerLinkActive="Active" style="color:white;"><i class="fa-solid fa-plus"></i> Generar Nómina</a>
+</div>
+<div class="col-md-4" *ngFor="let payment of payments">
+    <br>
+    <div class="card text-center">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" >
+            {{payment.teacherId}}
+        </div>
+        <div class="card-body">
+            <p>{{payment.firstName}} 
+                {{payment.fatherLastName}}
+                {{payment.motherLastName}}
+            </p>
+            <p>{{payment.rfc}} </p>
+            <p>{{payment.emissionDate| date:'yyyy-MM-dd'}} </p>
+            <p>${{payment.total}}</p>
+        </div>
+    </div>
+</div>
+
