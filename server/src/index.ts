@@ -5,6 +5,8 @@ import frequencyRoutes from './routes/frequencyroutes';
 import programRoutes from './routes/programroutes';
 import scheduleRoutes from './routes/scheduleroutes';
 import roleRoutes from './routes/roleroutes';
+import permissionRoutes from './routes/permissionRoutes';
+import screenRoutes from './routes/screenRoutes';
 import periodRoutes from './routes/periodroutes';
 import userRoutes from './routes/userroutes';
 import coordinatorRoutes from './routes/coordinatorroutes';
@@ -12,7 +14,7 @@ import studentRouters from './routes/studentrouters';
 import teacherRoutes from './routes/teacherRoutes';
 import courseRoutes from './routes/courseroutes';
 import courseDetailsRoutes from './routes/coursedetailsroutes';
- import loginroutes from './routes/loginroutes';
+import loginroutes from './routes/loginroutes';
 import salaryroutes from './routes/salaryroutes';
 
 class Server
@@ -48,6 +50,8 @@ class Server
         this.app.use('/api/programs',programRoutes);
         this.app.use('/api/schedules',scheduleRoutes);
         this.app.use('/api/roles',roleRoutes);
+        this.app.use('/api/screens',screenRoutes);
+        this.app.use('/api/permissions',permissionRoutes);
         this.app.use('/api/periods',periodRoutes);
         this.app.use('/api/users',userRoutes);
         this.app.use('/api/coordinators',coordinatorRoutes);

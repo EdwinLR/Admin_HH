@@ -30,11 +30,11 @@ import { CoordinatorsListComponent } from './components/coordinators-list/coordi
 import { CoordinatorsFormComponent } from './components/coordinators-form/coordinators-form.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { RoleListComponent } from './components/role-list/role-list.component';
-import { ScreenFormComponent } from './components/screen-form/screen-form.component';
-import { PermissionFormComponent } from './components/permission-form/permission-form.component';
 import { SalariesFormComponent } from './components/salaries-form/salaries-form.component';
 import { SalariesListComponent } from './components/salaries-list/salaries-list.component';
+import { RoleListComponent } from './components/roles-list/role-list.component';
+import { ScreenFormComponent } from './components/screens-form/screen-form.component';
+import { PermissionFormComponent } from './components/permissions-form/permission-form.component';
 
 @NgModule({
   declarations: [

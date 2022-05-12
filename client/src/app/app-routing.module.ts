@@ -5,12 +5,12 @@ import { TeachersListComponent } from './components/teachers-list/teachers-list.
 import { TeachersFormComponent } from './components/teachers-form/teachers-form.component'
 import { SchedulesFormComponent } from './components/schedules-form/schedules-form.component';
 import { SchedulesListComponent } from './components/schedules-list/schedules-list.component';
- import { FrequenciesFormComponent } from './components/frequencies-form/frequencies-form.component';
- import { FrequenciesListComponent } from './components/frequencies-list/frequencies-list.component';
- import { PeriodsFormComponent } from './components/periods-form/periods-form.component';
- import { PeriodsListComponent } from './components/periods-list/periods-list.component';
- import { ProgramsFormComponent } from './components/programs-form/programs-form.component';
- import { ProgramsListComponent } from './components/programs-list/programs-list.component';
+import { FrequenciesFormComponent } from './components/frequencies-form/frequencies-form.component';
+import { FrequenciesListComponent } from './components/frequencies-list/frequencies-list.component';
+import { PeriodsFormComponent } from './components/periods-form/periods-form.component';
+import { PeriodsListComponent } from './components/periods-list/periods-list.component';
+import { ProgramsFormComponent } from './components/programs-form/programs-form.component';
+import { ProgramsListComponent } from './components/programs-list/programs-list.component';
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
 import { CoursesFormComponent } from './components/courses-form/courses-form.component';
 import { CourseDetailsListComponent } from './components/course-details-list/course-details-list.component';
@@ -25,6 +25,9 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { LogoutComponent } from './components/logout/logout.component';
 import { SalariesFormComponent } from './components/salaries-form/salaries-form.component';
 import { SalariesListComponent } from './components/salaries-list/salaries-list.component';
+import { RoleListComponent } from './components/roles-list/role-list.component';
+import { ScreenFormComponent } from './components/screens-form/screen-form.component';
+import { PermissionFormComponent } from './components/permissions-form/permission-form.component';
 
 const routes: Routes = [
   {
@@ -206,6 +209,7 @@ const routes: Routes = [
     path:'coordinators/edit/:coordinatorId/:userId',
     component:CoordinatorsFormComponent
   },
+  //Login y Logout
   {
     path: 'login',
     component : LoginFormComponent
@@ -226,6 +230,21 @@ const routes: Routes = [
   {
     path:'payments/:teacherId/:emissionDate',
     component:SalariesFormComponent
+    },
+  // Roles
+  {
+    path: 'roles',
+    component: RoleListComponent
+  },
+  // Screen Control
+  {
+    path: 'roles/screens/:roleId',
+    component: ScreenFormComponent
+  },
+  // Permission Control
+  {
+    path: 'roles/permissions/:roleId',
+    component: PermissionFormComponent
   },
   //Sin coincidencias
   {
