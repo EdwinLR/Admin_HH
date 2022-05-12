@@ -1,0 +1,62 @@
+<div class="col-md-4 offset-md-2">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <input class="form-control" type="text" name="roleId" placeholder="Rol" [(ngModel)]="screensControl.roleId" [disabled]="true">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Courses" id="courses"[(ngModel)]="screensControl.courses"/>
+                    <label for="courses">Cursos</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Course_details" id="course_details"[(ngModel)]="screensControl.course_details"/>
+                    <label for="course_details">Lista de Curso</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Periods" id="periods"[(ngModel)]="screensControl.periods"/>
+                    <label for="periods">Periodos</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Frequencies" id="frequencies"[(ngModel)]="screensControl.frequencies"/>
+                    <label for="frequencies">Frecuencias</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Programs" id="programs"[(ngModel)]="screensControl.programs"/>
+                    <label for="programs">Programas</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Schedules" id="schedules"[(ngModel)]="screensControl.schedules"/>
+                    <label for="schedules">Horarios</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Coordinators" id="Coordinators"[(ngModel)]="screensControl.coordinators"/>
+                    <label for="Coordinators">Coordinadores</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Teachers" id="teachers"[(ngModel)]="screensControl.teachers"/>
+                    <label for="teachers">Profesores</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Students" id="students"[(ngModel)]="screensControl.students"/>
+                    <label for="students">Estudiantes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="roles" id="roles"[(ngModel)]="screensControl.roles"/>
+                    <label for="roles">Roles</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Permission" id="permission"[(ngModel)]="screensControl.permission"/>
+                    <label for="permission">Permisos</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Screens" id="screens"[(ngModel)]="screensControl.screens"/>
+                    <label for="screens">Permisos de Pantallas</label>
+                </div>
+                <br>
+                <button class="btn btn-success" (click)="updateScreens()" > Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>

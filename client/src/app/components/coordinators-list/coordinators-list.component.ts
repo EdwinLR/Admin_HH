@@ -3,6 +3,8 @@ import { CoordinatorsService } from 'src/app/services/coordinators.service';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { UsersService } from 'src/app/services/users.service';
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
 
 @Component({
   selector: 'app-coordinators-list',
@@ -18,22 +20,17 @@ export class CoordinatorsListComponent implements OnInit {
   users : any = [];
 
   constructor(private coordiantorService: CoordinatorsService, private router : Router,
-    private loginService : LoginService, private userService : UsersService) 
+    private loginService : LoginService, private userService : UsersService, private screenService : ScreensService) 
   {
 
   }
 
   ngOnInit(): void
   {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
-      this.listCoordinators();
-      this.filluser;
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+    this.listCoordinators();
+    this.filluser;
+
+    this.verifyAccess();
   }
 
   deleteCoordinator(userId:string)
@@ -67,6 +64,26 @@ export class CoordinatorsListComponent implements OnInit {
       },
       err => console.error(err)
     )
+  }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+
+          if(!screenPermissions.coordinators){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
   }
 
 }

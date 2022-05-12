@@ -2,6 +2,8 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoursesService } from 'src/app/services/courses.service';
 import { LoginService } from 'src/app/services/login.service';
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
 
 @Component({
   selector: 'app-courses-list',
@@ -14,18 +16,13 @@ export class CoursesListComponent implements OnInit {
   courses:any=[];
 
   constructor(private coursesService:CoursesService, private router : Router,
-    private loginService : LoginService) { 
+    private loginService : LoginService, private screenService : ScreensService) { 
   }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1' || role == '2'){
-      this.listCourses();
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+    this.listCourses();
+    
+    this.verifyAccess();
   }
 
   listCourses(){
@@ -49,6 +46,26 @@ export class CoursesListComponent implements OnInit {
       },
       err => console.error(err)
     );
+  }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+
+          if(!screenPermissions.courses){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
   }
 
 }
