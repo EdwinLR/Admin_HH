@@ -3,6 +3,8 @@ import { ScreensService } from 'src/app/services/screens.service';
 import { Screen } from 'src/app/models/Screen';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
+import { Permission } from 'src/app/models/Permission';
 
 @Component({
   selector: 'app-screen-form',
@@ -29,7 +31,7 @@ export class ScreenFormComponent implements OnInit {
   }
 
   constructor(private screenService : ScreensService, private loginService : LoginService,
-    private activatedRoute : ActivatedRoute, private router : Router) { }
+    private activatedRoute : ActivatedRoute, private router : Router, private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
     const params=this.activatedRoute.snapshot.params;
@@ -47,7 +49,22 @@ export class ScreenFormComponent implements OnInit {
   }
 
   updateScreens(){
-    console.log(this.screensControl);
+    //console.log(this.screensControl);
+
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.screensU){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/roles'])
+        }
+      },
+      err => console.error(err)
+    )
     
     this.screenService.updateScreen(this.screensControl.roleId!,this.screensControl).subscribe(
       res =>{

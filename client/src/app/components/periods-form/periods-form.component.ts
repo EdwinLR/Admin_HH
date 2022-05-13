@@ -1,8 +1,10 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
 import {Period} from 'src/app/models/Period';
+import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
 import { PeriodsService } from 'src/app/services/periods.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
@@ -24,32 +26,26 @@ export class PeriodsFormComponent implements OnInit {
     private activatedRoute:ActivatedRoute, 
     private periodService:PeriodsService,
     private loginService : LoginService,
-    private verificationService : SQLVerificatorService) { }
+    private verificationService : SQLVerificatorService,
+    private permissionService : PermissionsService) { }
 
     ngOnInit(): void {
-      var role = this.loginService.getCookie()
-      if(role == '1'){
-        const params=this.activatedRoute.snapshot.params;
-        //console.log(params);
-        if(params['periodId'])
-        {
-          this.periodService.getPeriod(params['periodId']).subscribe
-          (
-            res => 
-            {
-              console.log(res)
-              this.period=res;
-              this.edit=true;
-            },
-            err => console.error(err)
-          )
-        }
-        this.periodService.getPeriods().subscribe(p=>{this.rows=p})
+      const params=this.activatedRoute.snapshot.params;
+      //console.log(params);
+      if(params['periodId'])
+      {
+        this.periodService.getPeriod(params['periodId']).subscribe
+        (
+          res => 
+          {
+            console.log(res)
+            this.period=res;
+            this.edit=true;
+          },
+          err => console.error(err)
+        )
       }
-      else{
-        alert("No tienes permisos para acceder a este apartado.")
-        this.router.navigate(['/'])
-      }
+      this.periodService.getPeriods().subscribe(p=>{this.rows=p})
     }
   
     validatePeriod(){
@@ -81,6 +77,21 @@ export class PeriodsFormComponent implements OnInit {
 
     saveNewPeriod()
     {
+      let permissions : Permission;
+      let role = this.loginService.getCookie();
+
+      this.permissionService.getPermission(role).subscribe(
+        res =>{
+          permissions = res;
+
+          if(!permissions.periodsC){
+            alert("No tienes permisos para realizar esta acción.");
+              this.router.navigate(['/periods'])
+          }
+        },
+        err => console.error(err)
+      )
+
       this.period.period = this.verificationService.VerifyInjection(this.period.period!)
       
       if(this.period.period != ''){
@@ -100,8 +111,21 @@ export class PeriodsFormComponent implements OnInit {
     }
   
     updatePeriod(){
-      console.log(this.period);
-      //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
+      let permissions : Permission;
+      let role = this.loginService.getCookie();
+
+      this.permissionService.getPermission(role).subscribe(
+        res =>{
+          permissions = res;
+
+          if(!permissions.periodsU){
+            alert("No tienes permisos para realizar esta acción.");
+              this.router.navigate(['/periods'])
+          }
+        },
+        err => console.error(err)
+      )
+
       this.periodService.updatePeriod(this.period.periodId!,this.period).subscribe(
         res =>{
           console.log(res);

@@ -1,7 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
+import { Permission } from 'src/app/models/Permission';
 import {Program} from 'src/app/models/Program';
 import { LoginService } from 'src/app/services/login.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { ProgramsService } from 'src/app/services/programs.service';
 import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
@@ -24,11 +26,10 @@ export class ProgramsFormComponent implements OnInit {
     private activatedRoute:ActivatedRoute, 
     private programService:ProgramsService,
     private loginService : LoginService,
-    private verificationService : SQLVerificatorService) { }
+    private verificationService : SQLVerificatorService,
+    private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
       const params=this.activatedRoute.snapshot.params;
       //console.log(params);
       if(params['programId'])
@@ -45,11 +46,6 @@ export class ProgramsFormComponent implements OnInit {
         )
       }
       this.programService.getPrograms().subscribe(p=>{this.rows=p})
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
     
     }
 
@@ -83,6 +79,21 @@ export class ProgramsFormComponent implements OnInit {
   
     saveNewProgram()
     {
+      let permissions : Permission;
+      let role = this.loginService.getCookie();
+
+      this.permissionService.getPermission(role).subscribe(
+        res =>{
+          permissions = res;
+
+          if(!permissions.programsC){
+            alert("No tienes permisos para realizar esta acción.");
+              this.router.navigate(['/programs'])
+          }
+        },
+        err => console.error(err)
+      )
+
       this.program.program = this.verificationService.VerifyInjection(this.program.program!)
 
       if(this.program.program != ''){
@@ -102,8 +113,21 @@ export class ProgramsFormComponent implements OnInit {
     }
   
     updateProgram(){
-      console.log(this.program);
-      //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
+      let permissions : Permission;
+      let role = this.loginService.getCookie();
+
+      this.permissionService.getPermission(role).subscribe(
+        res =>{
+          permissions = res;
+
+          if(!permissions.programsU){
+            alert("No tienes permisos para realizar esta acción.");
+              this.router.navigate(['/programs'])
+          }
+        },
+        err => console.error(err)
+      )
+
       this.programService.updateProgram(this.program.programId!,this.program).subscribe(
         res =>{
           console.log(res);

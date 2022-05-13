@@ -1,6 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { SchedulesService } from 'src/app/services/schedules.service';
 
 @Component({
@@ -12,7 +14,7 @@ export class SchedulesListComponent implements OnInit {
   @HostBinding('class') classes='row';
   schedules:any=[];
   constructor(private schedulesService:SchedulesService, private router : Router,
-    private loginService : LoginService) { }
+    private loginService : LoginService, private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -34,6 +36,21 @@ export class SchedulesListComponent implements OnInit {
 
   deleteSchedule(scheduleId:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.schedulesD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/schedules'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.schedulesService.deleteSchedule(scheduleId).subscribe
     (
       res =>
