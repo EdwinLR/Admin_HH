@@ -6,7 +6,6 @@ import { ScreensService } from 'src/app/services/screens.service';
 import { Screen } from 'src/app/models/Screen';
 import { Permission } from 'src/app/models/Permission';
 import { PermissionsService } from 'src/app/services/permissions.service';
-  
 @Component({
   selector: 'app-course-details-list',
   templateUrl: './course-details-list.component.html',
