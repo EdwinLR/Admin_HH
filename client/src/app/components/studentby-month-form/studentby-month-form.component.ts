@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { iif } from 'rxjs';
 import { Student } from 'src/app/models/Student';
 import { User } from 'src/app/models/User';
 import { LoginService } from 'src/app/services/login.service';
@@ -79,12 +80,19 @@ exists : boolean = false;
 
     this.studentService.getStudentbyMonth(this.month.toString(),this.year.toString()).subscribe
     (
+      
         res =>
         {
-          
-          console.log(this.student.month!)
-          console.log(res);
-          this.router.navigate(['/students/StudentsbyMonth/'+this.month! + '/'+ this.year!])
+          if(!this.exists)
+          {
+            console.log(res)
+            console.log(this.student.month!)
+             this.router.navigate(['/students/StudentsbyMonth/'+this.month! + '/'+ this.year!])
+          }
+          else
+          {
+             alert("Estudiante(s) no registrados")
+          }
   
   
         }

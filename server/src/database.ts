@@ -8,6 +8,7 @@ const dbSettings=
    database:'BD_SistemaEscolar',
    options: {
    encrypt: true, 
+   
    trustServerCertificate: true
  }
 };
