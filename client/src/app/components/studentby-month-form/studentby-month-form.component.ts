@@ -31,30 +31,12 @@ student : Student=
 {
   studentId:0,
   email:'',
-  admissionDate: new Date(),
-
-
-
+  admissionDate: new Date()
 };
+
   month : number = 0
   year:number = 0
-months = 
-[
-  {monthId:1, name:"January"},
-  {monthId:2, name:"Febraury"},
-  {monthId:3, name:"March"},
-  {monthId:4, name:"April"},
-  {monthId:5, name:"January"},
-  {monthId:6, name:"January"},
-  {monthId:7, name:"January"},
-  {monthId:8, name:"January"},
-  {monthId:9, name:"January"},
-  {monthId:10, name:"January"},
-  {monthId:11, name:"January"},
-  {monthId:12, name:"January"}
-];
 students: any = [];
-exists : boolean = false;
 
 
   constructor(private studentService:StudentsService, private router : Router,
@@ -64,11 +46,8 @@ exists : boolean = false;
   ngOnInit(): void
   {
     var role = this.loginService.getCookie()
-    if(role == '1' || role == '2'){
-       this.listStudentbyMonth();
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
+    if(role == '4'){
+       alert("No tienes permisos para acceder a este apartado.")
       this.router.navigate(['/'])
     }
 
@@ -83,18 +62,12 @@ exists : boolean = false;
       
         res =>
         {
-          if(!this.exists)
-          {
             console.log(res)
             console.log(this.student.month!)
              this.router.navigate(['/students/StudentsbyMonth/'+this.month! + '/'+ this.year!])
-          }
-          else
-          {
-             alert("Estudiante(s) no registrados")
-          }
-  
-  
+        },
+        err =>{
+          alert("Estudiante(s) no registrados")
         }
     )
   }

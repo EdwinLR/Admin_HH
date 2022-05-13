@@ -49,7 +49,7 @@ class StudentsCoursesController{
         .input("cp3",req.body["CP_3"])
         .input("finalProject",req.body["final_Project"])
         .input("finalGrade",req.body["final_Grade"])
-        .query('UPDATE course_details SET WQ_1=@wq1,WQ_2=@wq2, WQ_3=@wq3,OQ_1=@oq1,OQ_2=@oq2,OQ_3=@oq3,WQ_1=@wq1,CP_1=@cp1,CP_2=@cp2,CP_3=@cp3,final_Project=@finalProject,final_Grade=@finalGrade WHERE studentId=@id');
+        .query('UPDATE course_details SET WQ_1=@wq1,WQ_2=@wq2, WQ_3=@wq3,OQ_1=@oq1,OQ_2=@oq2,OQ_3=@oq3,CP_1=@cp1,CP_2=@cp2,CP_3=@cp3,final_Project=@finalProject,final_Grade=@finalGrade WHERE studentId=@id');
         res.json({'message':'Eliminando Lista de Calificaciones del curso '+id+ ' Modificada'});
 
     }

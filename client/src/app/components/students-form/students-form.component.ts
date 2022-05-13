@@ -33,11 +33,10 @@ student : Student=
 {
   studentId:0,
   email:'',
-  admissionDate: new Date(),
-
+  admissionDate: new Date()
 };
-edit:boolean = false;
 
+edit:boolean = false;
 users : any = [];
 register : any = [];
 email : any = null;
