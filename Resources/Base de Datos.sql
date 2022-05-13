@@ -204,7 +204,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[salaries_report](
 	[teacherId] [int] NOT NULL,
-	[emissionDate] [decimal](4, 2) NOT NULL,
+	[emissionDate] [date] NOT NULL,
 	[total] [decimal](10, 2) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -421,9 +421,6 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[courses] CHECK CONSTRAINT [FK__courses__teacher__3B75D760]
 GO
-ALTER TABLE [dbo].[salaries_report]  WITH CHECK ADD FOREIGN KEY([taxId])
-REFERENCES [dbo].[taxes] ([taxId])
-GO
 ALTER TABLE [dbo].[salaries_report]  WITH CHECK ADD FOREIGN KEY([teacherId])
 REFERENCES [dbo].[teachers] ([teacherId])
 GO
@@ -533,11 +530,11 @@ GO
 INSERT INTO screen_control VALUES(1,1,1,1,1,1,1,1,1,1,1,1,1)
 INSERT INTO permission_control VALUES(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)
 GO
-INSERT INTO screen_control VALUES(2,0,1,1,1,1,1,1,1,1,1,1,1)
-INSERT INTO permission_control VALUES(2,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)
+INSERT INTO screen_control VALUES(2,0,1,1,1,1,0,1,0,1,0,1,1)
+INSERT INTO permission_control VALUES(2,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1)
 GO
 INSERT INTO screen_control VALUES(3,0,1,1,0,0,0,0,0,0,0,1,0)
-INSERT INTO permission_control VALUES(3,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+INSERT INTO permission_control VALUES(3,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 GO
 INSERT INTO screen_control VALUES(4,0,0,0,0,0,0,0,0,0,0,0,0)
 INSERT INTO permission_control VALUES(4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
