@@ -16,7 +16,7 @@
                 Starting Date: {{course.startingDate | date:'yyyy-MM-dd'}}
             </p>
             <p>Frequency: {{course.frequency}}</p>
-            <p>Schedule: {{course.startingTime}}-{{course.endingTime}}</p>
+            <p>Schedule: {{course.startingTime | date:'HH:mm:ss'}}-{{course.endingTime  | date:'HH:mm:ss'}}</p>
             <p>Program: {{course.program}}</p>
             <p>Period: {{course.period}}</p>
             <p>Teacher: {{course.firstName}} {{course.fatherLastName}} {{course.motherLastName}}</p>

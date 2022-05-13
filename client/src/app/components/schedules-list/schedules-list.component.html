@@ -9,8 +9,8 @@
             <button class="btn btn-danger" (click)="deleteSchedule(schedule.scheduleId)"><i class="fa-solid fa-minus"></i></button>
         </div>
         <div class="card-body">
-            <p>{{schedule.startingTime| date:'HH:mm'}} -
-               {{schedule.endingTime| date:'HH:mm'}} 
+            <p>{{schedule.startingTime| date:'HH:mm:ss'}} -
+               {{schedule.endingTime| date:'HH:mm:ss'}} 
             </p>
             <a [routerLink]="['/schedules/edit',schedule.scheduleId]" class="btn btn-info"><i class="fa-solid fa-pencil"></i></a>
         </div>
