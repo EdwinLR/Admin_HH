@@ -2,10 +2,38 @@
     <div class="card">
         <div class="card-body">
             <form>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Mes</label>
                     <input placeholder="month" type="text" name="Month" class="form-control" [(ngModel)]="month" autofocus/>
+                </div> -->
+                <!-- <div>
+                    <label>Mes</label>
+                    <select id="monthId" class="form-control" [(ngModel)]="month.monthId" name="monthId">  
+                        <option selected value=""></option>  
+                        <option [ngValue]="m.monthId" *ngFor="let month of months">  
+                         {{m.monthId}}
+                        </option>  
+                    </select> 
+                </div> -->
+                <div>
+                    <select [(ngModel)]='month' name="Month" class='form-control'>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+
+
                 </div>
+
                 <div class="form-group">
                     <label>Año</label>
                     <input placeholder="year" type="text" name="Year" class="form-control" [(ngModel)]="year" autofocus/>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Student } from 'src/app/models/Student';
 import { User } from 'src/app/models/User';
 import { LoginService } from 'src/app/services/login.service';
+import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 import { StudentsService } from 'src/app/services/students.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -36,12 +37,28 @@ student : Student=
 };
   month : number = 0
   year:number = 0
+months = 
+[
+  {monthId:1, name:"January"},
+  {monthId:2, name:"Febraury"},
+  {monthId:3, name:"March"},
+  {monthId:4, name:"April"},
+  {monthId:5, name:"January"},
+  {monthId:6, name:"January"},
+  {monthId:7, name:"January"},
+  {monthId:8, name:"January"},
+  {monthId:9, name:"January"},
+  {monthId:10, name:"January"},
+  {monthId:11, name:"January"},
+  {monthId:12, name:"January"}
+];
 students: any = [];
 exists : boolean = false;
 
 
   constructor(private studentService:StudentsService, private router : Router,
-    private loginService : LoginService, private userService : UsersService) { }
+    private loginService : LoginService, private userService : UsersService,
+    private verificationService : SQLVerificatorService) { }
 
   ngOnInit(): void
   {
@@ -59,6 +76,7 @@ exists : boolean = false;
 
   listStudentbyMonth()
   {
+
     this.studentService.getStudentbyMonth(this.month.toString(),this.year.toString()).subscribe
     (
         res =>
@@ -72,16 +90,5 @@ exists : boolean = false;
         }
     )
   }
-
-  // fillStudents()
-  // {
-  //   this.studentService.getStudents().subscribe(
-  //     res => {
-  //       this.students = res;
-  //       console.log(res)
-  //     },
-  //     err => console.error(err)
-  //   )
-  // }
 
 }
