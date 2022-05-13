@@ -1,6 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { UsersService } from 'src/app/services/users.service';
 import {TeachersService} from '../../services/teachers.service';
 
@@ -18,7 +20,7 @@ export class TeachersListComponent implements OnInit {
   users : any = [];
 
   constructor(private teacherService:TeachersService, private loginService : LoginService, private router : Router,
-    private userService : UsersService) 
+    private userService : UsersService, private permissionService : PermissionsService) 
   { 
 
   }
@@ -38,6 +40,21 @@ export class TeachersListComponent implements OnInit {
 
   deleteTeacher(userId:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.teachersD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/teachers'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.userService.deleteUser(userId).subscribe(
       res =>
       {

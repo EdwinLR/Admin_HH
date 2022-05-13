@@ -5,6 +5,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ScreensService } from 'src/app/services/screens.service';
 import { Screen } from 'src/app/models/Screen';
+import { PermissionsService } from 'src/app/services/permissions.service';
+import { Permission } from 'src/app/models/Permission';
 
 @Component({
   selector: 'app-coordinators-list',
@@ -20,7 +22,8 @@ export class CoordinatorsListComponent implements OnInit {
   users : any = [];
 
   constructor(private coordiantorService: CoordinatorsService, private router : Router,
-    private loginService : LoginService, private userService : UsersService, private screenService : ScreensService) 
+    private loginService : LoginService, private userService : UsersService, 
+    private screenService : ScreensService, private permissionService : PermissionsService) 
   {
 
   }
@@ -35,6 +38,21 @@ export class CoordinatorsListComponent implements OnInit {
 
   deleteCoordinator(userId:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.coordinatorsD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/coordinators'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.userService.deleteUser(userId).subscribe(
       res =>
       {

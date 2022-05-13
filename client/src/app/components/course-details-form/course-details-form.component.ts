@@ -5,6 +5,8 @@ import { StudentsService } from 'src/app/services/students.service';
 import { CourseDetail } from 'src/app/models/CourseDetail';
 import { LoginService } from 'src/app/services/login.service';
 import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
+import { Permission } from 'src/app/models/Permission';
 
 @Component({
   selector: 'app-course-details-form',
@@ -38,42 +40,50 @@ export class CourseDetailsFormComponent implements OnInit {
   detailId : any = null;
 
   constructor(private courseDetailService : CourseDetailsService, private studentService : StudentsService, 
-    private router : Router, private route : ActivatedRoute, private loginService : LoginService,  private verificationService : SQLVerificatorService ) {
+    private router : Router, private route : ActivatedRoute, private loginService : LoginService,  
+    private verificationService : SQLVerificatorService, private permissionService : PermissionsService ) {
      }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1' || role == '2'){
-      const params = this.route.snapshot.params
-      console.log(params)
+    const params = this.route.snapshot.params
+    console.log(params)
 
-      this.crn = params['crn'];
-      this.detailId = params['studentId'];
-      console.log(this.crn);
-      console.log(this.detailId);
+    this.crn = params['crn'];
+    this.detailId = params['studentId'];
+    console.log(this.crn);
+    console.log(this.detailId);
 
-      if(this.detailId != undefined){
-        this.courseDetailService.getCourseDetail(this.detailId).subscribe(
-          res => {
-            console.log(res);
-            this.courseDetail = res;
-            this.edit = true;
-          },
-          err => console.log(err)
-        );
-      }
-
-      this.fillStudents()
-      this.fillCourse_Details()
+    if(this.detailId != undefined){
+      this.courseDetailService.getCourseDetail(this.detailId).subscribe(
+        res => {
+          console.log(res);
+          this.courseDetail = res;
+          this.edit = true;
+        },
+        err => console.log(err)
+      );
     }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+
+    this.fillStudents()
+    this.fillCourse_Details()
   }
 
   saveNewCourseDetail() 
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.course_detailsC){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/courses'])
+        }
+      },
+      err => console.error(err)
+    )
 
     this.courseDetail.studentId = this.verificationService.VerifyInjection(this.courseDetail.studentId!)
 
@@ -112,6 +122,21 @@ export class CourseDetailsFormComponent implements OnInit {
   }
 
   updateCourseDetail(){
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.course_detailsU){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/courses'])
+        }
+      },
+      err => console.error(err)
+    )
+
     this.courseDetail.final_Grade = ((this.courseDetail.WQ_1! + this.courseDetail.WQ_2! + this.courseDetail.WQ_3!)/3 + (this.courseDetail.OQ_1! + this.courseDetail.OQ_2! + this.courseDetail.OQ_3!)/3 + (this.courseDetail.CP_1! + this.courseDetail.CP_2! + this.courseDetail.CP_3!)/3 + this.courseDetail.final_Project!) /4;
     this.courseDetail.final_Grade = +this.courseDetail.final_Grade.toFixed(2);
 

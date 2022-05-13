@@ -92,7 +92,22 @@ export class PermissionFormComponent implements OnInit {
   }
 
   updateScreens(){
-    console.log(this.permissionControl);
+    //console.log(this.permissionControl);
+
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.permissionsU){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/roles'])
+        }
+      },
+      err => console.error(err)
+    )
     
     this.permissionService.updatePermission(this.permissionControl.roleId!,this.permissionControl).subscribe(
       res =>{

@@ -4,6 +4,8 @@ import { CoursesService } from 'src/app/services/courses.service';
 import { LoginService } from 'src/app/services/login.service';
 import { ScreensService } from 'src/app/services/screens.service';
 import { Screen } from 'src/app/models/Screen';
+import { Permission } from 'src/app/models/Permission';
+import { PermissionsService } from 'src/app/services/permissions.service';
 
 @Component({
   selector: 'app-courses-list',
@@ -16,7 +18,8 @@ export class CoursesListComponent implements OnInit {
   courses:any=[];
 
   constructor(private coursesService:CoursesService, private router : Router,
-    private loginService : LoginService, private screenService : ScreensService) { 
+    private loginService : LoginService, private screenService : ScreensService,
+    private permissionService : PermissionsService) { 
   }
 
   ngOnInit(): void {
@@ -37,6 +40,21 @@ export class CoursesListComponent implements OnInit {
 
   deleteCourse(crn:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.coursesD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/courses'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.coursesService.deleteCourse(crn).subscribe
     (
       res =>

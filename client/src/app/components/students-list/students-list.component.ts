@@ -4,6 +4,8 @@ import { Student } from 'src/app/models/Student';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { UsersService } from 'src/app/services/users.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
+import { Permission } from 'src/app/models/Permission';
 
 @Component({
   selector: 'app-students-list',
@@ -19,7 +21,8 @@ export class StudentsListComponent implements OnInit {
   users : any = [];
 
   constructor(private studentService:StudentsService, private router : Router,
-    private loginService : LoginService, private userService : UsersService) { }
+    private loginService : LoginService, private userService : UsersService,
+    private permissionService : PermissionsService) { }
 
   ngOnInit(): void
   {
@@ -35,6 +38,21 @@ export class StudentsListComponent implements OnInit {
 
   deleteStudent(userId:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.studentsD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/students'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.userService.deleteUser(userId).subscribe(
       res =>
       {

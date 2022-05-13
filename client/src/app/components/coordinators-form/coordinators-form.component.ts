@@ -7,6 +7,8 @@ import { User } from 'src/app/models/User';
 import { UsersService } from 'src/app/services/users.service';
 import { LoginService } from 'src/app/services/login.service';
 import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
+import { Permission } from 'src/app/models/Permission';
+import { PermissionsService } from 'src/app/services/permissions.service';
 
 @Component({
   selector: 'app-coordinators-form',
@@ -43,56 +45,65 @@ dateString : any;
   constructor(private coordinatorsService:CoordinatorsService, 
     private usersService:UsersService, private router:Router,
     private activatedRoute:ActivatedRoute, private loginService : LoginService,
-    @Inject(LOCALE_ID) private locale:string, private verificationService : SQLVerificatorService) 
+    @Inject(LOCALE_ID) private locale:string, private verificationService : SQLVerificatorService,
+    private permissionService : PermissionsService) 
   {
 
   }
 
   ngOnInit(): void 
   {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
-      const params=this.activatedRoute.snapshot.params;
-      console.log(params['coordinatorId'])
-      if(params['coordinatorId'])
-      {
-        this.coordinatorsService.getCoordinator(params['coordinatorId']).subscribe
-        (
-          res => 
-          {
-            console.log(res)
-            this.coordinator=res;
+    const params=this.activatedRoute.snapshot.params;
+    console.log(params['coordinatorId'])
+    if(params['coordinatorId'])
+    {
+      this.coordinatorsService.getCoordinator(params['coordinatorId']).subscribe
+      (
+        res => 
+        {
+          console.log(res)
+          this.coordinator=res;
 
-            this.dateString = formatDate(this.coordinator.hiringDate!, 'yyyy-MM-dd', this.locale)
-            console.log(this.dateString)
-          },
-          err => console.error(err)
-        );
-      }
+          this.dateString = formatDate(this.coordinator.hiringDate!, 'yyyy-MM-dd', this.locale)
+          console.log(this.dateString)
+        },
+        err => console.error(err)
+      );
+    }
 
-      if(params['userId'])
-      {
-        this.usersService.getUser(params['userId']).subscribe
-        (
-          res => 
-          {
-            console.log(res)
-            this.user=res;
-            this.edit=true;
-          },
-          err => console.error(err)
-        );
-      }
-      this.filluser();
+    if(params['userId'])
+    {
+      this.usersService.getUser(params['userId']).subscribe
+      (
+        res => 
+        {
+          console.log(res)
+          this.user=res;
+          this.edit=true;
+        },
+        err => console.error(err)
+      );
     }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+    this.filluser();
   }
 
   saveNewCoordinator()
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.coordinatorsC){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/coordinators'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.user.email = this.verificationService.VerifyInjection(this.user.email!)
     this.user.fatherLastName = this.verificationService.VerifyInjection(this.user.fatherLastName!)
     this.user.firstName = this.verificationService.VerifyInjection(this.user.firstName!)
@@ -148,8 +159,20 @@ dateString : any;
   
 
   updateCoordinator(){
-    //console.log(this.teacher);
-    //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.coordinatorsU){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/coordinators'])
+        }
+      },
+      err => console.error(err)
+    )
   
    this.usersService.updateUser(this.coordinator.userId!,this.user).subscribe(
       res =>{

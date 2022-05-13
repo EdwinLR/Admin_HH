@@ -4,6 +4,8 @@ import { FrequenciesService } from 'src/app/services/frequencies.service';
 import { LoginService } from 'src/app/services/login.service';
 import { ScreensService } from 'src/app/services/screens.service';
 import { Screen } from 'src/app/models/Screen';
+import { Permission } from 'src/app/models/Permission';
+import { PermissionsService } from 'src/app/services/permissions.service';
 
 @Component({
   selector: 'app-frequencies-list',
@@ -14,7 +16,8 @@ export class FrequenciesListComponent implements OnInit {
   @HostBinding('class') classes='row';
   frequencies:any=[];
   constructor(private frequenciesService:FrequenciesService, private router : Router,
-    private loginService : LoginService, private screenService : ScreensService) { }
+    private loginService : LoginService, private screenService : ScreensService,
+    private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
     this.listFrequencies()
@@ -31,6 +34,21 @@ export class FrequenciesListComponent implements OnInit {
 
   deleteFrequency(frequencyId:string)
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.frequenciesD){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/frequencies'])
+        }
+      },
+      err => console.error(err)
+    )
+    
     this.frequenciesService.deleteFrequency(frequencyId).subscribe
     (
       res =>

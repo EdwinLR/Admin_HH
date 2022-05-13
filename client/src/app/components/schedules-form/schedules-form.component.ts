@@ -1,7 +1,9 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
+import { Permission } from 'src/app/models/Permission';
 import { Schedule } from 'src/app/models/Schedule';
 import { LoginService } from 'src/app/services/login.service';
+import { PermissionsService } from 'src/app/services/permissions.service';
 import { SchedulesService } from 'src/app/services/schedules.service';
 import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
@@ -25,32 +27,26 @@ export class SchedulesFormComponent implements OnInit {
     private router:Router,
     private activatedRoute:ActivatedRoute,
     private loginService : LoginService,
-    private verificationService : SQLVerificatorService) { }
+    private verificationService : SQLVerificatorService,
+    private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
-      const params=this.activatedRoute.snapshot.params;
-      //console.log(params);
-      if(params['scheduleId'])
-      {
-        this.schedulesService.getSchedule(params['scheduleId']).subscribe
-        (
-          res => 
-          {
-            console.log(res)
-            this.schedule=res;
-            this.edit=true;
-          },
-          err => console.error(err)
-        )
-      }
-      this.schedulesService.getSchedules().subscribe(s=>{this.rows=s});
+    const params=this.activatedRoute.snapshot.params;
+    //console.log(params);
+    if(params['scheduleId'])
+    {
+      this.schedulesService.getSchedule(params['scheduleId']).subscribe
+      (
+        res => 
+        {
+          console.log(res)
+          this.schedule=res;
+          this.edit=true;
+        },
+        err => console.error(err)
+      )
     }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+    this.schedulesService.getSchedules().subscribe(s=>{this.rows=s});
     
   }
 
@@ -90,6 +86,20 @@ export class SchedulesFormComponent implements OnInit {
 
   saveNewSchedule()
   {
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.schedulesC){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/schedules'])
+        }
+      },
+      err => console.error(err)
+    )
     
     delete this.schedule.scheduleId;
 
@@ -103,8 +113,21 @@ export class SchedulesFormComponent implements OnInit {
   }
 
   updateSchedule(){
-    console.log(this.schedule);
-    //! -->Utilizado cuando se pueden esperar distintos tipos de un dato
+    let permissions : Permission;
+    let role = this.loginService.getCookie();
+
+    this.permissionService.getPermission(role).subscribe(
+      res =>{
+        permissions = res;
+
+        if(!permissions.schedulesU){
+          alert("No tienes permisos para realizar esta acción.");
+            this.router.navigate(['/schedules'])
+        }
+      },
+      err => console.error(err)
+    )
+
     this.schedulesService.updateSchedule(this.schedule.scheduleId!,this.schedule).subscribe(
       res =>{
         console.log(res);
