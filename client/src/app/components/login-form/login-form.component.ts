@@ -59,7 +59,7 @@ export class LoginFormComponent implements OnInit {
           if (this.user.password == this.login.password){
 
             console.log(this.user.roleId)
-            this.loginService.setCookie(this.user.roleId);
+            this.loginService.setCookie(this.user.roleId, this.user.email);
 
             this.router.navigate(['/'])
             //alert("Login correcto!");

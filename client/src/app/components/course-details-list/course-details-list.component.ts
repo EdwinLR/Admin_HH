@@ -18,12 +18,14 @@ export class CourseDetailsListComponent implements OnInit {
   courseDetails : any = [];
   id : any;
   permissionFlag : boolean = false;
+  roleId:string='';
 
   constructor(private courseDetailService : CourseDetailsService, private route : ActivatedRoute, 
     private router : Router, private loginService : LoginService, private screenService : ScreensService,
     private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
+    this.roleId=this.loginService.getCookie();
     this.id = this.route.snapshot.paramMap.get('id')
     this.getListCourseDetails(this.id);
 

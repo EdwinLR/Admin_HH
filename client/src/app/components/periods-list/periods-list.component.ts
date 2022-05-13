@@ -4,6 +4,8 @@ import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
 import { PeriodsService } from 'src/app/services/periods.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
 
 @Component({
   selector: 'app-periods-list',
@@ -17,17 +19,12 @@ export class PeriodsListComponent implements OnInit {
   permissionFlag : boolean = false;
 
   constructor(private periodService:PeriodsService, private router : Router,
-    private loginService : LoginService, private permissionService : PermissionsService) { }
+    private loginService : LoginService, private permissionService : PermissionsService,private screenService:ScreensService) { }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
+ 
       this.listPeriods();
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+      this.verifyAccess();
   }
 
   listPeriods(){
@@ -71,4 +68,25 @@ export class PeriodsListComponent implements OnInit {
     
   }
 
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.periods){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
 }
+
+

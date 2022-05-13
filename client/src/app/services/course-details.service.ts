@@ -33,4 +33,5 @@ export class CourseDetailsService {
   updateCourseDetail(id : string | number, courseDetail : CourseDetail) : Observable<CourseDetail>{
     return this.http.put("http://localhost:5000/api/courseDetails/" + id, courseDetail);
   }
+  
 }

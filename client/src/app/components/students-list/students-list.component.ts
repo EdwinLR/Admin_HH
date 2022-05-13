@@ -6,6 +6,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { UsersService } from 'src/app/services/users.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { Permission } from 'src/app/models/Permission';
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
 
 @Component({
   selector: 'app-students-list',
@@ -23,18 +25,12 @@ export class StudentsListComponent implements OnInit {
 
   constructor(private studentService:StudentsService, private router : Router,
     private loginService : LoginService, private userService : UsersService,
-    private permissionService : PermissionsService) { }
+    private permissionService : PermissionsService, private screenService:ScreensService) { }
 
   ngOnInit(): void
   {
-    var role = this.loginService.getCookie()
-    if(role == '1' || role == '2'){
       this.listStudents();
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+      this.verifyAccess();
   }
 
   deleteStudent(userId:string)
@@ -78,4 +74,24 @@ export class StudentsListComponent implements OnInit {
       err=> console.error(err)
     );
   }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.students){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
 }

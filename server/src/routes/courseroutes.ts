@@ -16,6 +16,7 @@ class CourseRoutes{
         this.router.delete('/:id',courseController.delete);
         this.router.put('/:id',courseController.update);
         this.router.get('/:id',courseController.details);
+        this.router.get('/:userId/:roleId',courseController.detailsByTeacher);
     }
 }
 

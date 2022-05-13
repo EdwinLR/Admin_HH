@@ -82,6 +82,15 @@ class CourseController {
             }
         });
     }
+    detailsByTeacher(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //Destructurando una parte del objeto de Javascript
+            const course = (yield (yield database_1.default).request()
+                .input("userId", req.params['userId'])
+                .query('SELECT c.crn,c.courseName,c.startingDate,f.frequency,s.startingTime, s.endingTime, u.firstName, u.fatherLastName, u.motherLastName, pr.program, p.period FROM courses c, frequencies f, schedules s, teachers t, programs pr, periods p, users u WHERE c.frequencyId=f.frequencyId AND c.scheduleId=s.scheduleId AND c.teacherId=t.teacherId AND c.programId=pr.programId AND c.periodId=p.periodId AND t.userId=u.userId AND c.teacherId IN (SELECT teacherId FROM teachers WHERE userId IN (SELECT userId FROM users WHERE email=@userId))')).recordset;
+            res.json(course);
+        });
+    }
 }
 exports.courseController = new CourseController();
 exports.default = exports.courseController;

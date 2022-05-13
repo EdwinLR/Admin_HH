@@ -15,16 +15,21 @@ export class LoginService {
   }
 
   logout(){
-    this.setCookie('0');
+    this.setCookie('0','');
 
       var Cookie = this.getCookie();
       console.log(Cookie);
   }
 
-  setCookie(Id: string) {
+  setCookie(Id: string, email:string) {
     this.cookies.set("roleId", Id);
+    this.cookies.set('email',email);
   }
   getCookie() {
     return this.cookies.get("roleId");
+  }
+
+  getCookie2(){
+    return this.cookies.get('email')
   }
 }

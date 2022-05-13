@@ -4,6 +4,8 @@ import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { RolesService } from 'src/app/services/roles.service';
+import { Screen } from 'src/app/models/Screen';
+import { ScreensService } from 'src/app/services/screens.service';
 
 @Component({
   selector: 'app-roles-list',
@@ -18,14 +20,16 @@ export class RoleListComponent implements OnInit {
   permissionFlag : boolean = false;
 
   constructor(private roleService:RolesService, private router : Router, 
-   private loginService : LoginService, private permissionService : PermissionsService) 
+   private loginService : LoginService, private permissionService : PermissionsService,
+  private screenService:ScreensService) 
   {
 
-   }
+  }
 
   ngOnInit(): void 
   {
     this.listRoles();
+    this.verifyAccess();
   }
 
   listRoles()
@@ -66,5 +70,25 @@ export class RoleListComponent implements OnInit {
     }
     
   }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.roles){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
 
 }

@@ -37,4 +37,9 @@ export class CoursesService {
   {
     return this.Http.put('http://localhost:5000/api/courses/'+crn,course);
   }
+
+  getCoursesByTeacher(userEmail:string, roleId:number|string)
+  {
+    return this.Http.get("http://localhost:5000/api/courses/" + userEmail+'/'+roleId);
+  }
 }

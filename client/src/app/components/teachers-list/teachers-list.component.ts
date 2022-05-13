@@ -5,6 +5,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { UsersService } from 'src/app/services/users.service';
 import {TeachersService} from '../../services/teachers.service';
+import { Screen } from 'src/app/models/Screen';
+import { ScreensService } from 'src/app/services/screens.service';
 
 @Component({
   selector: 'app-teachers-list',
@@ -21,21 +23,15 @@ export class TeachersListComponent implements OnInit {
   permissionFlag : boolean = false;
 
   constructor(private teacherService:TeachersService, private loginService : LoginService, private router : Router,
-    private userService : UsersService, private permissionService : PermissionsService) 
+    private userService : UsersService, private permissionService : PermissionsService, private screenService:ScreensService) 
   { 
 
   }
 
   ngOnInit(): void 
   {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
       this.listTeachers()
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+      this.verifyAccess();
     
   }
 
@@ -83,5 +79,25 @@ export class TeachersListComponent implements OnInit {
       err => console.error(err)
     );
   }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.students){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
   
 }

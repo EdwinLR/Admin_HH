@@ -26,7 +26,7 @@ export class TeachersFormComponent implements OnInit {
   motherLastName:'',
   phoneNumber:'',
   photoUrl:'',
-  roleId:2,
+  roleId:3,
   password:'12345'
 };
 

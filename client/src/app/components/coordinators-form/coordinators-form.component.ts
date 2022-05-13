@@ -25,7 +25,7 @@ user:User=
   email:'',
   phoneNumber:'',
   photoUrl:'',
-  roleId:1,
+  roleId:2,
   password:'12345'
 }
 coordinator : Coordinator=

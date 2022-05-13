@@ -4,6 +4,8 @@ import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { SchedulesService } from 'src/app/services/schedules.service';
+import { ScreensService } from 'src/app/services/screens.service';
+import { Screen } from 'src/app/models/Screen';
 
 @Component({
   selector: 'app-schedules-list',
@@ -18,17 +20,11 @@ export class SchedulesListComponent implements OnInit {
 
   constructor(private schedulesService:SchedulesService, private router : Router,
     private loginService : LoginService, private permissionService : PermissionsService,
-    @Inject(LOCALE_ID) private locale:string) { }
+    @Inject(LOCALE_ID) private locale:string, private screenService:ScreensService) { }
 
   ngOnInit(): void {
-    var role = this.loginService.getCookie()
-    if(role == '1'){
       this.listSchedules();
-    }
-    else{
-      alert("No tienes permisos para acceder a este apartado.")
-      this.router.navigate(['/'])
-    }
+      this.verifyAccess();
   }
 
   listSchedules(){
@@ -71,5 +67,25 @@ export class SchedulesListComponent implements OnInit {
     }
     
   }
+
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screenService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.schedules){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
 
 }

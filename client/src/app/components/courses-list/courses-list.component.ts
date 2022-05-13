@@ -24,9 +24,27 @@ export class CoursesListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listCourses();
-    
-    this.verifyAccess();
+    const roleId=this.loginService.getCookie();
+    if(roleId=='3')
+    {
+      this.listCoursesByTeacher();
+      this.verifyAccess();
+    }
+    else
+    {
+     this.listCourses();
+      this.verifyAccess();
+    }
+  }
+
+  listCoursesByTeacher() {
+    this.coursesService.getCoursesByTeacher(this.loginService.getCookie2(),this.loginService.getCookie()).subscribe(
+      res => {
+        console.log(res);
+        this.courses=res
+      },
+      err => console.error(err)
+    );
   }
 
   listCourses(){

@@ -4,6 +4,8 @@ import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { ProgramsService } from 'src/app/services/programs.service';
+import { Screen } from 'src/app/models/Screen';
+import { ScreensService } from 'src/app/services/screens.service';
 
 @Component({
   selector: 'app-programs-list',
@@ -17,7 +19,7 @@ export class ProgramsListComponent implements OnInit {
   permissionFlag : boolean = false;
 
   constructor(private programService:ProgramsService, private router : Router,
-    private loginService : LoginService, private permissionService : PermissionsService) { }
+    private loginService : LoginService, private permissionService : PermissionsService,private screensService:ScreensService) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -71,6 +73,25 @@ export class ProgramsListComponent implements OnInit {
    
   }
 
+  verifyAccess(){
+    let screenPermissions : Screen;
+    let role = this.loginService.getCookie();
+  
+    console.log(role)
+    this.screensService.getScreen(role).subscribe
+      (
+        res => 
+        {
+          screenPermissions = res;
+  
+          if(!screenPermissions.programs){
+            alert("No tienes permisos para acceder a este apartado.");
+            this.router.navigate(['/'])
+          }
+        },
+        err => console.error(err)
+      );
+    }
 
 
 }
