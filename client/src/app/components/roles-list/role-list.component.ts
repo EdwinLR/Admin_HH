@@ -13,7 +13,10 @@ import { RolesService } from 'src/app/services/roles.service';
 export class RoleListComponent implements OnInit {
 
   @HostBinding('class') classes = 'row';
+
   roles: any = {};
+  permissionFlag : boolean = false;
+
   constructor(private roleService:RolesService, private router : Router, 
    private loginService : LoginService, private permissionService : PermissionsService) 
   {
@@ -44,18 +47,24 @@ export class RoleListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/roles'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.roleService.deleteRole(roleId).subscribe
-    (
-      res=>{
-        console.log(res),
-        this.listRoles()
-      },
-      err=>console.error(err)
-      )
-      }
+    if(this.permissionFlag){
+      this.roleService.deleteRole(roleId).subscribe
+      (
+        res=>{
+          console.log(res),
+          this.listRoles()
+        },
+        err=>console.error(err)
+        )
+    }
+    
+  }
 
 }

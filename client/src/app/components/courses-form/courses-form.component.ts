@@ -42,6 +42,7 @@ export class CoursesFormComponent implements OnInit
   programs:any=[];
   periods:any=[];
   dateString:any;
+  permissionFlag : boolean = false;
   
   constructor(private coursesService:CoursesService,
     private router:Router,
@@ -98,26 +99,33 @@ export class CoursesFormComponent implements OnInit
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
 
-    this.course.courseName = this.verificationService.VerifyInjection(this.course.courseName!)
+    if(this.permissionFlag){
+        this.course.courseName = this.verificationService.VerifyInjection(this.course.courseName!)
 
-    if(this.course.courseName != '' && this.course.frequencyId != '' && this.course.periodId != '' && 
-    this.course.programId != '' && this.course.scheduleId != '' && this.course.teacherId != ''){
-      this.coursesService.saveCourse(this.course).subscribe(
-        res =>{
-          console.log(this.course)
-          console.log(res);
-          this.router.navigate(['/courses']);
-        },
-        err => console.error(err)
-      );
+      if(this.course.courseName != '' && this.course.frequencyId != '' && this.course.periodId != '' && 
+      this.course.programId != '' && this.course.scheduleId != '' && this.course.teacherId != ''){
+        this.coursesService.saveCourse(this.course).subscribe(
+          res =>{
+            console.log(this.course)
+            console.log(res);
+            this.router.navigate(['/courses']);
+          },
+          err => console.error(err)
+        );
+      }
+      else{
+        alert("Por favor completa todos los registros.")
+      }
     }
-    else{
-      alert("Por favor completa todos los registros.")
-    }
+
+    
   }
 
   updateCourse(){
@@ -132,17 +140,23 @@ export class CoursesFormComponent implements OnInit
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
 
-    this.coursesService.updateCourse(this.course.crn!,this.course).subscribe(
-      res =>{
-        console.log(res);
-        this.router.navigate(['/courses']);
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.coursesService.updateCourse(this.course.crn!,this.course).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/courses']);
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
 }

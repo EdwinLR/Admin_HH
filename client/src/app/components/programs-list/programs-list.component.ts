@@ -12,7 +12,9 @@ import { ProgramsService } from 'src/app/services/programs.service';
 })
 export class ProgramsListComponent implements OnInit {
   @HostBinding('class') classes='row';
+
   programs:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private programService:ProgramsService, private router : Router,
     private loginService : LoginService, private permissionService : PermissionsService) { }
@@ -48,19 +50,25 @@ export class ProgramsListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/programs'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.programService.deleteProgram(program).subscribe
-    (
-      res =>
-      {
-        console.log(res);
-        this.listPrograms();
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.programService.deleteProgram(program).subscribe
+      (
+        res =>
+        {
+          console.log(res);
+          this.listPrograms();
+        },
+        err => console.error(err)
+      );
+    }
+   
   }
 
 

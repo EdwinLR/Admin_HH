@@ -16,6 +16,7 @@ export class CoursesListComponent implements OnInit {
   @HostBinding('class') classes='row';
 
   courses:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private coursesService:CoursesService, private router : Router,
     private loginService : LoginService, private screenService : ScreensService,
@@ -51,19 +52,25 @@ export class CoursesListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.coursesService.deleteCourse(crn).subscribe
-    (
-      res =>
-      {
-        console.log(res);
-        this.listCourses();
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.coursesService.deleteCourse(crn).subscribe
+      (
+        res =>
+        {
+          console.log(res);
+          this.listCourses();
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
   verifyAccess(){

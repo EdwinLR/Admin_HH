@@ -5,7 +5,6 @@ import { Schedule } from 'src/app/models/Schedule';
 import { LoginService } from 'src/app/services/login.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { SchedulesService } from 'src/app/services/schedules.service';
-import { SQLVerificatorService } from 'src/app/services/sqlverificator.service';
 
 @Component({
   selector: 'app-schedules-form',
@@ -20,14 +19,15 @@ export class SchedulesFormComponent implements OnInit {
     startingTime:'',
     endingTime:''
   }
+
   edit:boolean=false;
   rows:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private schedulesService:SchedulesService, 
     private router:Router,
     private activatedRoute:ActivatedRoute,
     private loginService : LoginService,
-    private verificationService : SQLVerificatorService,
     private permissionService : PermissionsService) { }
 
   ngOnInit(): void {
@@ -97,19 +97,25 @@ export class SchedulesFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/schedules'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    delete this.schedule.scheduleId;
+    if(this.permissionFlag){
+      delete this.schedule.scheduleId;
 
-    this.schedulesService.saveSchedule(this.schedule).subscribe(
-      res =>{
-        console.log(res);
-        this.router.navigate(['/schedules']);
-      },
-      err => console.error(err)
-    );
+      this.schedulesService.saveSchedule(this.schedule).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/schedules']);
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
   updateSchedule(){
@@ -124,16 +130,22 @@ export class SchedulesFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/schedules'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
 
-    this.schedulesService.updateSchedule(this.schedule.scheduleId!,this.schedule).subscribe(
-      res =>{
-        console.log(res);
-        this.router.navigate(['/schedules']);
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.schedulesService.updateSchedule(this.schedule.scheduleId!,this.schedule).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/schedules']);
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 }

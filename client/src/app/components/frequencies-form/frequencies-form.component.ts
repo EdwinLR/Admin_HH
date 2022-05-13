@@ -22,6 +22,7 @@ export class FrequenciesFormComponent implements OnInit {
   }
   edit:boolean=false;
   rows:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private frequenciesService:FrequenciesService, 
     private router:Router,
@@ -91,25 +92,30 @@ export class FrequenciesFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
           this.router.navigate(['/frequencies'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     );
     
-    this.frequency.frequency = this.verificationService.VerifyInjection(this.frequency.frequency!)
+    if(this.permissionFlag){
+        this.frequency.frequency = this.verificationService.VerifyInjection(this.frequency.frequency!)
 
-    if(this.frequency.frequency != ''){
-        delete this.frequency.frequencyId;
+      if(this.frequency.frequency != ''){
+          delete this.frequency.frequencyId;
 
-      this.frequenciesService.saveFrequency(this.frequency).subscribe(
-        res =>{
-          console.log(res);
-          this.router.navigate(['/frequencies']);
-        },
-        err => console.error(err)
-      );
-    }
-    else{
-      alert("Por favor completa todos los registros.")
+        this.frequenciesService.saveFrequency(this.frequency).subscribe(
+          res =>{
+            console.log(res);
+            this.router.navigate(['/frequencies']);
+          },
+          err => console.error(err)
+        );
+      }
+      else{
+        alert("Por favor completa todos los registros.")
+      }
     }
     
   }
@@ -125,19 +131,24 @@ export class FrequenciesFormComponent implements OnInit {
         if(!permissions.frequenciesU){
           alert("No tienes permisos para realizar esta acción.");
           this.router.navigate(['/frequencies'])
-          return;
+        }
+        else{
+          this.permissionFlag = true;
         }
       },
       err => console.error(err)
     )
 
-    this.frequenciesService.updateFrequency(this.frequency.frequencyId!,this.frequency).subscribe(
-      res =>{
-        console.log(res);
-        this.router.navigate(['/frequencies']);
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.frequenciesService.updateFrequency(this.frequency.frequencyId!,this.frequency).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/frequencies']);
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
 }

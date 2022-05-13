@@ -12,7 +12,10 @@ import { PermissionsService } from 'src/app/services/permissions.service';
 })
 export class PeriodsListComponent implements OnInit {
   @HostBinding('class') classes='row';
+
   periods:any=[];
+  permissionFlag : boolean = false;
+
   constructor(private periodService:PeriodsService, private router : Router,
     private loginService : LoginService, private permissionService : PermissionsService) { }
 
@@ -47,19 +50,25 @@ export class PeriodsListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/periods'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.periodService.deletePeriod(periodId).subscribe
-    (
-      res =>
-      {
-        console.log(res);
-        this.listPeriods();
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.periodService.deletePeriod(periodId).subscribe
+      (
+        res =>
+        {
+          console.log(res);
+          this.listPeriods();
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
 }

@@ -20,6 +20,7 @@ export class CoordinatorsListComponent implements OnInit {
   coordinators:any=[];
   coordinator : any;
   users : any = [];
+  permissionFlag : boolean = false;
 
   constructor(private coordiantorService: CoordinatorsService, private router : Router,
     private loginService : LoginService, private userService : UsersService, 
@@ -49,19 +50,24 @@ export class CoordinatorsListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/coordinators'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.userService.deleteUser(userId).subscribe(
-      res =>
-      {
-        console.log(res);
-        this.ngOnInit()
-        
-      },
-      err => console.error(err)
-    )
+    if(this.permissionFlag){
+        this.userService.deleteUser(userId).subscribe(
+        res =>
+        {
+          console.log(res);
+          this.ngOnInit()
+          
+        },
+        err => console.error(err)
+      )
+    }
   }
 
   listCoordinators()

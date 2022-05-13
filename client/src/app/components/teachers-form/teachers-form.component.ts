@@ -39,11 +39,11 @@ teacher:Teacher=
 }
 
 edit:boolean=false;
-
 users : any = [];
 register : any = [];
 exists : boolean = false;
 dateString : any;
+permissionFlag : boolean = false;
 
   constructor(private teachersService:TeachersService, 
     private usersService:UsersService,
@@ -103,60 +103,66 @@ dateString : any;
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/teachers'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.user.email = this.verificationService.VerifyInjection(this.user.email!)
-    this.user.fatherLastName = this.verificationService.VerifyInjection(this.user.fatherLastName!)
-    this.user.firstName = this.verificationService.VerifyInjection(this.user.firstName!)
-    this.user.motherLastName = this.verificationService.VerifyInjection(this.user.motherLastName!)
-    this.user.phoneNumber = this.verificationService.VerifyInjection(this.user.phoneNumber!)
+    if(this.permissionFlag){
+      this.user.email = this.verificationService.VerifyInjection(this.user.email!)
+      this.user.fatherLastName = this.verificationService.VerifyInjection(this.user.fatherLastName!)
+      this.user.firstName = this.verificationService.VerifyInjection(this.user.firstName!)
+      this.user.motherLastName = this.verificationService.VerifyInjection(this.user.motherLastName!)
+      this.user.phoneNumber = this.verificationService.VerifyInjection(this.user.phoneNumber!)
 
-    let flag:boolean=false;
+      let flag:boolean=false;
 
-    if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 
-    this.user.motherLastName != '' && this.user.phoneNumber != '' && this.teacher.rfc != ''){
-      console.log(this.teacher);
-      for (let i = 0; i < this.register.length; i++) {
-        if (this.register[i].email == this.user.email) {
-          this.exists = true;
-          break;
+      if(this.user.email != '' && this.user.fatherLastName != '' && this.user.firstName != '' && 
+      this.user.motherLastName != '' && this.user.phoneNumber != '' && this.teacher.rfc != ''){
+        console.log(this.teacher);
+        for (let i = 0; i < this.register.length; i++) {
+          if (this.register[i].email == this.user.email) {
+            this.exists = true;
+            break;
+          }
+          else{
+            this.exists = false;
+          }
+        }
+
+        if(!this.exists){
+          delete this.teacher.teacherId;
+
+          if(this.user.photoUrl == ''){
+            this.user.photoUrl = '/assets/NoImage.jpg'
+          }
+          
+          this.usersService.saveUser(this.user).subscribe(res => {
+            console.log(res);
+          },
+          err => console.error(err))
+          
+          this.teacher.email=this.user.email;
+          
+          this.teachersService.saveTeacher(this.teacher).subscribe(
+            res => {
+              console.log(res);
+              this.router.navigate(["/teachers"]);
+            },
+            err => console.error(err)
+          );
         }
         else{
-          this.exists = false;
+          alert("No puedes registrar un nuevo usuario con ese correo.")
         }
-      }
-
-      if(!this.exists){
-        delete this.teacher.teacherId;
-
-        if(this.user.photoUrl == ''){
-          this.user.photoUrl = '/assets/NoImage.jpg'
-        }
-        
-        this.usersService.saveUser(this.user).subscribe(res => {
-          console.log(res);
-        },
-        err => console.error(err))
-        
-        this.teacher.email=this.user.email;
-        
-        this.teachersService.saveTeacher(this.teacher).subscribe(
-          res => {
-            console.log(res);
-            this.router.navigate(["/teachers"]);
-          },
-          err => console.error(err)
-        );
       }
       else{
-        alert("No puedes registrar un nuevo usuario con ese correo.")
+        alert("Por favor completa todos los registros.")
       }
     }
-    else{
-      alert("Por favor completa todos los registros.")
-    }
+    
   }
   
 
@@ -174,24 +180,30 @@ dateString : any;
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/teachers'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.usersService.updateUser(this.teacher.userId!,this.user).subscribe(
-      res =>{
-        console.log(res);
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.usersService.updateUser(this.teacher.userId!,this.user).subscribe(
+        res =>{
+          console.log(res);
+        },
+        err => console.error(err)
+      );
 
-    this.teachersService.updateTeacher(this.teacher.teacherId!,this.teacher).subscribe(
-      res =>{
-        console.log(res);
-        this.router.navigate(['/teachers']);
-      },
-      err => console.error(err)
-    );
+      this.teachersService.updateTeacher(this.teacher.teacherId!,this.teacher).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/teachers']);
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
   filluser()

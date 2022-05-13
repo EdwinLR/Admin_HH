@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Permission } from 'src/app/models/Permission';
 import { LoginService } from 'src/app/services/login.service';
@@ -12,9 +12,13 @@ import { SchedulesService } from 'src/app/services/schedules.service';
 })
 export class SchedulesListComponent implements OnInit {
   @HostBinding('class') classes='row';
+
   schedules:any=[];
+  permissionFlag : boolean = false;
+
   constructor(private schedulesService:SchedulesService, private router : Router,
-    private loginService : LoginService, private permissionService : PermissionsService) { }
+    private loginService : LoginService, private permissionService : PermissionsService,
+    @Inject(LOCALE_ID) private locale:string) { }
 
   ngOnInit(): void {
     var role = this.loginService.getCookie()
@@ -47,19 +51,25 @@ export class SchedulesListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/schedules'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.schedulesService.deleteSchedule(scheduleId).subscribe
-    (
-      res =>
-      {
-        console.log(res);
-        this.listSchedules();
-      },
-      err => console.error(err)
-    );
+    if(this.permissionFlag){
+      this.schedulesService.deleteSchedule(scheduleId).subscribe
+      (
+        res =>
+        {
+          console.log(res);
+          this.listSchedules();
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
 }

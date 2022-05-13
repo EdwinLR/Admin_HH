@@ -30,6 +30,8 @@ export class ScreenFormComponent implements OnInit {
     teachers : false
   }
 
+  permissionFlag : boolean = false;
+
   constructor(private screenService : ScreensService, private loginService : LoginService,
     private activatedRoute : ActivatedRoute, private router : Router, private permissionService : PermissionsService) { }
 
@@ -62,18 +64,23 @@ export class ScreenFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/roles'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.screenService.updateScreen(this.screensControl.roleId!,this.screensControl).subscribe(
-      res =>{
-        console.log(res);
-      },
-      err => console.error(err)
-    );
-
-    this.router.navigate(['/roles'])
+    if(this.permissionFlag){
+      this.screenService.updateScreen(this.screensControl.roleId!,this.screensControl).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/roles'])
+        },
+        err => console.error(err)
+      );
+    }
+    
   }
 
   verifyAccess(){

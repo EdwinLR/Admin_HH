@@ -38,6 +38,7 @@ export class CourseDetailsFormComponent implements OnInit {
   exists : boolean = false;
   crn : any = null;
   detailId : any = null;
+  permissionFlag : boolean = false;
 
   constructor(private courseDetailService : CourseDetailsService, private studentService : StudentsService, 
     private router : Router, private route : ActivatedRoute, private loginService : LoginService,  
@@ -81,44 +82,51 @@ export class CourseDetailsFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
 
-    this.courseDetail.studentId = this.verificationService.VerifyInjection(this.courseDetail.studentId!)
+    if(this.permissionFlag){
+        this.courseDetail.studentId = this.verificationService.VerifyInjection(this.courseDetail.studentId!)
 
-    if(this.courseDetail.studentId != ''){
-      delete this.courseDetail.final_Grade;
-      this.courseDetail.courseId = this.crn;
+      if(this.courseDetail.studentId != ''){
+        delete this.courseDetail.final_Grade;
+        this.courseDetail.courseId = this.crn;
 
-      console.log(this.courseDetail);
-      
-      for (let i = 0; i < this.details.length; i++) {
-        if (this.details[i].studentId == this.courseDetail.studentId) {
-          this.exists = true;
-          break;
+        console.log(this.courseDetail);
+        
+        for (let i = 0; i < this.details.length; i++) {
+          if (this.details[i].studentId == this.courseDetail.studentId) {
+            this.exists = true;
+            break;
+          }
+          else{
+            this.exists = false;
+          }
+        }
+
+        if(!this.exists){
+          this.courseDetailService.createCourseDetail(this.courseDetail).subscribe(
+            res => {
+              console.log(res);
+              this.router.navigate(['/courseDetails', this.crn]);
+            },
+            err => console.error(err)
+          );
         }
         else{
-          this.exists = false;
+          alert("No puede inscribir a un alumno ya inscrito en este u otro curso.")
         }
       }
-
-      if(!this.exists){
-        this.courseDetailService.createCourseDetail(this.courseDetail).subscribe(
-          res => {
-            console.log(res);
-            this.router.navigate(['/courseDetails', this.crn]);
-          },
-          err => console.error(err)
-        );
-      }
       else{
-        alert("No puede inscribir a un alumno ya inscrito en este u otro curso.")
+        alert("Por favor completa todos los registros.")
       }
     }
-    else{
-      alert("Por favor completa todos los registros.")
-    }
+
+    
   }
 
   updateCourseDetail(){
@@ -133,20 +141,27 @@ export class CourseDetailsFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
 
-    this.courseDetail.final_Grade = ((this.courseDetail.WQ_1! + this.courseDetail.WQ_2! + this.courseDetail.WQ_3!)/3 + (this.courseDetail.OQ_1! + this.courseDetail.OQ_2! + this.courseDetail.OQ_3!)/3 + (this.courseDetail.CP_1! + this.courseDetail.CP_2! + this.courseDetail.CP_3!)/3 + this.courseDetail.final_Project!) /4;
-    this.courseDetail.final_Grade = +this.courseDetail.final_Grade.toFixed(2);
+    if(this.permissionFlag){
+      this.courseDetail.final_Grade = ((this.courseDetail.WQ_1! + this.courseDetail.WQ_2! + this.courseDetail.WQ_3!)/3 + (this.courseDetail.OQ_1! + this.courseDetail.OQ_2! + this.courseDetail.OQ_3!)/3 + (this.courseDetail.CP_1! + this.courseDetail.CP_2! + this.courseDetail.CP_3!)/3 + this.courseDetail.final_Project!) /4;
+      this.courseDetail.final_Grade = +this.courseDetail.final_Grade.toFixed(2);
 
-    this.courseDetailService.updateCourseDetail(this.courseDetail.studentId!, this.courseDetail).subscribe(
-      res => {
-        console.log(res);
-        this.router.navigate(['/courseDetails', this.crn]);
-      },
-      err => console.error(err)
-    );
+      this.courseDetailService.updateCourseDetail(this.courseDetail.studentId!, this.courseDetail).subscribe(
+        res => {
+          console.log(res);
+          this.router.navigate(['/courseDetails', this.crn]);
+        },
+        err => console.error(err)
+      );
+    }
+
+    
   }
 
   fillStudents(){

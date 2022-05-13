@@ -14,8 +14,11 @@ import { PermissionsService } from 'src/app/services/permissions.service';
 })
 export class CourseDetailsListComponent implements OnInit {
   @HostBinding('class') classes = 'row';
+
   courseDetails : any = [];
   id : any;
+  permissionFlag : boolean = false;
+
   constructor(private courseDetailService : CourseDetailsService, private route : ActivatedRoute, 
     private router : Router, private loginService : LoginService, private screenService : ScreensService,
     private permissionService : PermissionsService) { }
@@ -50,18 +53,24 @@ export class CourseDetailsListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/courses'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    console.log(studentId);
-    this.courseDetailService.deleteCourseDetail(studentId).subscribe(
-      res =>{
-        console.log(res)
-        window.location.reload();
-      },
-      err => console.log(err)
-    );
+    if(this.permissionFlag){
+      console.log(studentId);
+      this.courseDetailService.deleteCourseDetail(studentId).subscribe(
+        res =>{
+          console.log(res)
+          window.location.reload();
+        },
+        err => console.log(err)
+      );
+    }
+    
   }
   
   verifyAccess(){

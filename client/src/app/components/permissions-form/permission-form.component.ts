@@ -64,6 +64,8 @@ export class PermissionFormComponent implements OnInit {
     teachers : false
   }
 
+  permissionFlag : boolean = false;
+
   constructor(private activatedRoute : ActivatedRoute, private router : Router, private loginService : LoginService,
     private permissionService : PermissionsService, private screenService : ScreensService) { }
 
@@ -105,18 +107,22 @@ export class PermissionFormComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/roles'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.permissionService.updatePermission(this.permissionControl.roleId!,this.permissionControl).subscribe(
-      res =>{
-        console.log(res);
-      },
-      err => console.error(err)
-    );
-
-    this.router.navigate(['/roles'])
+    if(this.permissionFlag){
+      this.permissionService.updatePermission(this.permissionControl.roleId!,this.permissionControl).subscribe(
+        res =>{
+          console.log(res);
+          this.router.navigate(['/roles'])
+        },
+        err => console.error(err)
+      );
+    }
   }
 
   verifyAccess(){

@@ -21,6 +21,7 @@ export class ProgramsFormComponent implements OnInit {
   }
   edit:boolean=false;
   rows:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private router:Router,
     private activatedRoute:ActivatedRoute, 
@@ -90,26 +91,31 @@ export class ProgramsFormComponent implements OnInit {
             alert("No tienes permisos para realizar esta acción.");
               this.router.navigate(['/programs'])
           }
+          else{
+            this.permissionFlag = true;
+          }
         },
         err => console.error(err)
       )
 
-      this.program.program = this.verificationService.VerifyInjection(this.program.program!)
+      if(this.permissionFlag){
+        this.program.program = this.verificationService.VerifyInjection(this.program.program!)
 
-      if(this.program.program != ''){
-        delete this.program.programId;
-        this.programService.saveProgram(this.program).subscribe(
-          res =>{
-            console.log(res);
-            this.router.navigate(['/programs']);
-          },
-          err => console.error(err)
-        );
+        if(this.program.program != ''){
+          delete this.program.programId;
+          this.programService.saveProgram(this.program).subscribe(
+            res =>{
+              console.log(res);
+              this.router.navigate(['/programs']);
+            },
+            err => console.error(err)
+          );
+        }
+        else{
+          alert("Por favor completa todos los registros.")
+        }
       }
-      else{
-        alert("Por favor completa todos los registros.")
-      }
-      
+    
     }
   
     updateProgram(){
@@ -124,16 +130,22 @@ export class ProgramsFormComponent implements OnInit {
             alert("No tienes permisos para realizar esta acción.");
               this.router.navigate(['/programs'])
           }
+          else{
+            this.permissionFlag = true;
+          }
         },
         err => console.error(err)
       )
 
-      this.programService.updateProgram(this.program.programId!,this.program).subscribe(
-        res =>{
-          console.log(res);
-          this.router.navigate(['/programs']);
-        },
-        err => console.error(err)
-      );
+      if(this.permissionFlag){
+        this.programService.updateProgram(this.program.programId!,this.program).subscribe(
+          res =>{
+            console.log(res);
+            this.router.navigate(['/programs']);
+          },
+          err => console.error(err)
+        );
+      }
+      
     }
   }

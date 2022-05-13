@@ -21,6 +21,7 @@ export class PeriodsFormComponent implements OnInit {
   }
   edit:boolean=false;
   rows:any=[];
+  permissionFlag : boolean = false;
 
   constructor(private router:Router,
     private activatedRoute:ActivatedRoute, 
@@ -88,26 +89,32 @@ export class PeriodsFormComponent implements OnInit {
             alert("No tienes permisos para realizar esta acción.");
               this.router.navigate(['/periods'])
           }
+          else{
+            this.permissionFlag = true;
+          }
         },
         err => console.error(err)
       )
 
-      this.period.period = this.verificationService.VerifyInjection(this.period.period!)
+      if(this.permissionFlag){
+        this.period.period = this.verificationService.VerifyInjection(this.period.period!)
+        
+        if(this.period.period != ''){
+          delete this.period.periodId;
       
-      if(this.period.period != ''){
-        delete this.period.periodId;
-    
-        this.periodService.savePeriod(this.period).subscribe(
-          res =>{
-            console.log(res);
-            this.router.navigate(['/periods']);
-          },
-          err => console.error(err)
-        );
+          this.periodService.savePeriod(this.period).subscribe(
+            res =>{
+              console.log(res);
+              this.router.navigate(['/periods']);
+            },
+            err => console.error(err)
+          );
+        }
+        else{
+          alert("Por favor completa todos los registros.")
+        }
       }
-      else{
-        alert("Por favor completa todos los registros.")
-      }
+      
     }
   
     updatePeriod(){
@@ -122,16 +129,22 @@ export class PeriodsFormComponent implements OnInit {
             alert("No tienes permisos para realizar esta acción.");
               this.router.navigate(['/periods'])
           }
+          else{
+            this.permissionFlag = true;
+          }
         },
         err => console.error(err)
       )
 
-      this.periodService.updatePeriod(this.period.periodId!,this.period).subscribe(
-        res =>{
-          console.log(res);
-          this.router.navigate(['/periods']);
-        },
-        err => console.error(err)
-      );
+      if(this.permissionFlag){
+        this.periodService.updatePeriod(this.period.periodId!,this.period).subscribe(
+          res =>{
+            console.log(res);
+            this.router.navigate(['/periods']);
+          },
+          err => console.error(err)
+        );
+      }
+      
     }
   }

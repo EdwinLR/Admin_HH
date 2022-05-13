@@ -14,7 +14,10 @@ import { PermissionsService } from 'src/app/services/permissions.service';
 })
 export class FrequenciesListComponent implements OnInit {
   @HostBinding('class') classes='row';
+
   frequencies:any=[];
+  permissionFlag : boolean = false;
+
   constructor(private frequenciesService:FrequenciesService, private router : Router,
     private loginService : LoginService, private screenService : ScreensService,
     private permissionService : PermissionsService) { }
@@ -45,11 +48,15 @@ export class FrequenciesListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/frequencies'])
         }
+        else{
+          this.permissionFlag=true;
+        }
       },
       err => console.error(err)
     )
     
-    this.frequenciesService.deleteFrequency(frequencyId).subscribe
+    if(this.permissionFlag){
+      this.frequenciesService.deleteFrequency(frequencyId).subscribe
     (
       res =>
       {
@@ -58,6 +65,7 @@ export class FrequenciesListComponent implements OnInit {
       },
       err => console.error(err)
     );
+    }
   }
 
   verifyAccess(){

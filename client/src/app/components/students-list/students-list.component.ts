@@ -19,6 +19,7 @@ export class StudentsListComponent implements OnInit {
   student : any;
   roles : any = [];
   users : any = [];
+  permissionFlag : boolean = false;
 
   constructor(private studentService:StudentsService, private router : Router,
     private loginService : LoginService, private userService : UsersService,
@@ -49,19 +50,25 @@ export class StudentsListComponent implements OnInit {
           alert("No tienes permisos para realizar esta acción.");
             this.router.navigate(['/students'])
         }
+        else{
+          this.permissionFlag = true;
+        }
       },
       err => console.error(err)
     )
     
-    this.userService.deleteUser(userId).subscribe(
-      res =>
-      {
-        console.log(res);
-        this.ngOnInit()
-        
-      },
-      err => console.error(err)
-    )
+    if(this.permissionFlag){
+      this.userService.deleteUser(userId).subscribe(
+        res =>
+        {
+          console.log(res);
+          this.ngOnInit()
+          
+        },
+        err => console.error(err)
+      )
+    }
+    
   }
 
   listStudents()
